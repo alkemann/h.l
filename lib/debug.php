@@ -6,7 +6,7 @@
 class Debug {
 
     public static function dump($var, $options = array()) {
-        $options += array('trace' => null, 'echo' => true);
+        $options += array('trace' => null, 'echo' => true, 'die' => false);
         if (!$options['trace']) $options['trace'] = debug_backtrace();
         extract($options);
         $location = Debug::location($trace);
@@ -18,6 +18,7 @@ class Debug {
         $locString = Debug::locationString($location);
         $result = '<div style="font-size:11px;">' . $locString . $dump . '</div>';
         if ($echo) echo $result;
+        if ($die) die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
     }
 
     private static function locationString($location) {
@@ -46,3 +47,10 @@ function dd() {
     foreach ($args as $var) 
         Debug::dump($var, compact('trace'));
 };
+function ddd() {
+    $args = func_get_args();
+    $trace = debug_backtrace();
+    foreach ($args as $var) 
+        Debug::dump($var, compact('trace'));
+    die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
+}
