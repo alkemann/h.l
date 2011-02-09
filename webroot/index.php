@@ -2,25 +2,18 @@
 //** semi config
 define('CONTENT_DIR', 'content');
 define('LAYOUT_DIR', 'layout');
+define('LIB_DIR', 'lib');
 //** auto defines
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', realpath(dirname(dirname(__FILE__))));
 define('WEBROOT_DIR', basename(dirname(__FILE__)));
 define('WWW_ROOT', dirname(__FILE__) . DS);
-define('CORE_PATH', ROOT . DS);
+define('CORE_PATH', ROOT . DS . LIB_DIR . DS);
 define('CONTENT_PATH', ROOT . DS . CONTENT_DIR . DS);
 define('LAYOUT_PATH', CONTENT_PATH . LAYOUT_DIR . DS);
 
+define('DEBUG', 2);
 
-// include CORE_PATH . DS . 'bootstrap.php';
+if (DEBUG) include CORE_PATH . 'debug.php';
 
-
-include LAYOUT_PATH . 'head.html.php';
-include LAYOUT_PATH . 'neck.html.php';
-
-// @todo
-include CONTENT_PATH . 'pages' . DS . 'start.html.php';
-
-include LAYOUT_PATH . 'foot.html.php';
-
-// phpinfo();
+include CORE_PATH . 'bootstrap.php';
