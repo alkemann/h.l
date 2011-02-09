@@ -19,7 +19,7 @@ class Dispatch {
 
     public function run() {
         $response = $this->_render->head();
-        $response .= $this->_render->view();
+        $response .= $this->_render->view($this->_request->viewToRender());
         $response .= $this->_render->foot();
         return $response;
     }

@@ -15,9 +15,13 @@ class Render {
         return $ret;
     }
 
-    public function view() {
+    public function view($view) {
+        $file = CONTENT_PATH . 'pages' . DS . $view;
+        if (!file_exists($file)) {
+            throw new \core\exceptions\InvalidUrlException('Static page does not exist. Create it at: '.$file.'');
+        }
         ob_start();
-        include CONTENT_PATH . 'pages' . DS . 'start.html.php';
+        include $file;
         $ret = ob_get_contents();
         ob_end_clean();
         return $ret;

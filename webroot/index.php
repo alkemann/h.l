@@ -16,6 +16,7 @@ define('DEBUG', 2);
 
 if (DEBUG) include CORE_PATH . 'debug.php';
 
+require CORE_PATH . 'exceptions' . DS . 'exceptions.php';
 require CORE_PATH . 'dispatch.php';
 $Dispatch = new \core\Dispatch();
 echo $Dispatch->run();
