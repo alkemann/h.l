@@ -16,4 +16,6 @@ define('DEBUG', 2);
 
 if (DEBUG) include CORE_PATH . 'debug.php';
 
-include CORE_PATH . 'bootstrap.php';
+require CORE_PATH . 'dispatch.php';
+$Dispatch = new \core\Dispatch();
+echo $Dispatch->run();

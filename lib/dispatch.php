@@ -4,6 +4,7 @@
  */
 namespace core;
 
+require CORE_PATH . 'render.php';
 include CORE_PATH . 'request.php';
 
 class Dispatch {
@@ -17,7 +18,10 @@ class Dispatch {
     }
 
     public function run() {
-        $this->_render->view();
+        $response = $this->_render->head();
+        $response .= $this->_render->view();
+        $response .= $this->_render->foot();
+        return $response;
     }
 
 }
