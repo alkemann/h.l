@@ -21,14 +21,24 @@ class ErrorHandler {
     }
 
     public function production() {
-        // create instance of a logger and log exception
-
         if ($this->exception instanceof \core\exceptions\InvalidUrlException) {
             header("HTTP/1.0 404 Not Found");
             echo $this->dispatch->getRender()->view('error404.html.php');
             exit;
         }
-        throw $this->exception;
+        $file = LOGS_PATH . 'error.' . time() . '.log';
+        $fileHandler = fopen($file, 'c');
+        fwrite($fileHandler, $this->exception->__toString());
+        fwrite($fileHandler, "\n\n");
+        fwrite($fileHandler, print_r($this->dispatch->getRequest(), true));
+        fclose($fileHandler);
+        header("HTTP/1.0 500 Interal Server Error");
+        
+        $errorPage = CONTENT_PATH . 'pages' . DS . 'error500.html.php';
+        if (file_exists($errorPage)) {
+            include $errorPage;
+        }
+        exit;
     }
 
 }

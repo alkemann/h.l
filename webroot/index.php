@@ -3,6 +3,7 @@
 define('CONTENT_DIR', 'content');
 define('LAYOUT_DIR', 'layout');
 define('LIB_DIR', 'libs');
+define('RESOURCE_DIR', 'resources');
 //** auto defines
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', realpath(dirname(dirname(__FILE__))));
@@ -12,6 +13,7 @@ define('CORE_PATH', ROOT . DS . LIB_DIR . DS);
 define('CONTENT_PATH', ROOT . DS . CONTENT_DIR . DS);
 define('LAYOUT_PATH', CONTENT_PATH . LAYOUT_DIR . DS);
 define('LIBS_PATH', ROOT . DS . LIB_DIR);
+define('LOGS_PATH', ROOT . DS . RESOURCE_DIR . DS . 'logs' . DS);
 
 define('DEBUG', 0);
 if ('DEBUG') require CORE_PATH . 'core' . DS . 'debug.class.php';

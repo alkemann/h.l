@@ -18,6 +18,10 @@ class Dispatch {
         return $this->_render;
     }
 
+    public function getRequest() {
+        return $this->_requestObj;
+    }
+
     public function run() {
         $response = $this->_render->head();
         $response .= $this->_render->view($this->_requestObj->viewToRender());
