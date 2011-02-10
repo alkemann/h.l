@@ -18,7 +18,7 @@ class Render {
     public function view($view) {
         $file = CONTENT_PATH . 'pages' . DS . $view;
         if (!file_exists($file)) {
-            throw new \core\exceptions\InvalidUrlException('Static page does not exist. Create it at: '.$file.'');
+            throw new \core\exceptions\InvalidUrlException($file);
         }
         ob_start();
         include $file;
