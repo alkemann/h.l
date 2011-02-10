@@ -17,7 +17,7 @@ class Request {
     protected $_view;
 
     public function __construct($_REQUEST) {
-        $this->_url = $_REQUEST['url'];
+        $this->_url = url_route($_REQUEST['url']);
         
         $parts = \explode('/', $this->_url);
         $last = \array_slice($parts, -1, 1, true);
