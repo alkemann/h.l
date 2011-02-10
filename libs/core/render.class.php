@@ -18,7 +18,11 @@ class Render {
     public function view($view) {
         $file = CONTENT_PATH . 'pages' . DS . $view;
         if (!file_exists($file)) {
-            throw new \core\exceptions\InvalidUrlException($file);
+            $customFile = CONTENT_PATH . 'custom' . DS . $view;
+            if (!file_exists($customFile)) 
+                throw new \core\exceptions\InvalidUrlException($file);
+            else 
+                $file = $customFile;
         }
         ob_start();
         include $file;
