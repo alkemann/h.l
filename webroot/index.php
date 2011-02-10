@@ -14,9 +14,13 @@ define('LAYOUT_PATH', CONTENT_PATH . LAYOUT_DIR . DS);
 
 define('DEBUG', 2);
 
-if (DEBUG) include CORE_PATH . 'debug.php';
+define('CLASS_DIR', CORE_PATH);
+set_include_path(get_include_path().PATH_SEPARATOR.CLASS_DIR);
+spl_autoload_extensions('.class.php');
+spl_autoload_register();
 
-require CORE_PATH . 'exceptions' . DS . 'exceptions.php';
-require CORE_PATH . 'dispatch.php';
+
+try {
 $Dispatch = new \core\Dispatch();
 echo $Dispatch->run();
+} catch (Exception $e) { $errorHandler = new \core\ErrorHandler($e); $errorHandler->deal(); }

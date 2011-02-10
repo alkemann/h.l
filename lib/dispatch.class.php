@@ -4,17 +4,14 @@
  */
 namespace core;
 
-require CORE_PATH . 'render.php';
-include CORE_PATH . 'request.php';
-
 class Dispatch {
     
     protected $_render;
-    protected $_request;
+    protected $_requestObj;
     
     public function __construct() {
         $this->_render = new Render();
-        $this->_request = new Request($_REQUEST);
+        $this->_requestObj = new Request($_REQUEST);
     }
 
     public function run() {

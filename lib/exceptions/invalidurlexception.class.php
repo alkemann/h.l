@@ -1,13 +1,6 @@
-<?php
-/**
- * Contains all the Exceptions
- */
- 
+<?php 
+
 namespace core\exceptions;
-
-class BaseException extends \Exception {
-
-}
 
 class InvalidUrlException extends BaseException {
 
