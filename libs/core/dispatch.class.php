@@ -14,6 +14,10 @@ class Dispatch {
         $this->_requestObj = new Request($_REQUEST);
     }
 
+    public function getRender() {
+        return $this->_render;
+    }
+
     public function run() {
         $response = $this->_render->head();
         $response .= $this->_render->view($this->_requestObj->viewToRender());
