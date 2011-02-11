@@ -30,8 +30,8 @@ class Debug {
         extract($location);
         $ret = "line: <strong style='color:#C00'>$line</strong> &nbsp;".
                "file: <strong style='color:#C00'>$file</strong> &nbsp;";
-        $ret .= $class ? "class: <strong style='color:#C00'>$class</strong> &nbsp;" :'';
-        $ret .= $function ? "function: <strong style='color:#C00'>$function</strong> &nbsp;" :'';
+        $ret .= isset($class) ? "class: <strong style='color:#C00'>$class</strong> &nbsp;" :'';
+        $ret .= isset($function) ? "function: <strong style='color:#C00'>$function</strong> &nbsp;" :'';
         return $ret;
     }
 

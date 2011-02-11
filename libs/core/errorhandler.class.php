@@ -31,8 +31,8 @@ class ErrorHandler {
         }
         $file = LOGS_PATH . 'error.' . time() . '.log';
         $fileHandler = fopen($file, 'c');
-        $exceptionMessage = htmlspecialchars($this->exception->__toString(),ENT_QUOTES)
-        fwrite($fileHandler, exceptionMessage);
+        $exceptionMessage = strip_tags($this->exception->__toString());
+        fwrite($fileHandler, $exceptionMessage);
         fwrite($fileHandler, "\n\n");
         fwrite($fileHandler, print_r($this->dispatch->getRequest(), true));
         fclose($fileHandler);
