@@ -5,61 +5,71 @@
 
 class Debug {
 
-    private static $__current_depth;
-    private static $__object_references;
-    private static $__options;
+    private $__current_depth;
+    private $__object_references;
+    private $__options;
 
-    public static function dump($var, $options = array()) {
+    public function dump($var, $options = array()) {
         $options += array(
             'trace' => null,
             'echo' => true,
-            'depth' => 6
+            'depth' => 10
         );
         $this->__options = $options;
+        $this->__current_depth = 1;
+        $this->__object_references = array();
+        
         if (!$options['trace']) $options['trace'] = debug_backtrace();
         extract($options);
-        $location = Debug::location($trace);
+        $location = $this->location($trace);
 
-        static::$__current_depth = 1;
-        static::$__object_references = array();
-        $dump = static::dump_it($var);
+        $dump = $this->dump_it($var);
         
-        $locString = Debug::locationString($location);
+        $locString = $this->locationString($location);
         $result = '<style type="text/css">@import url("/css/debug.css");</style>';
         $result .= '<div class="debug-dump"><span class="location">' . $locString . '</span>'.
             '<br> ' . $dump . '</div>';
         if ($echo) echo $result;
     }
-    private static function dump_it($var) {
-        if (static::$__current_depth++ > static::$__options['depth']) return;
+    private function dump_it($var) {
         if (is_array($var))
-            return static::dump_array($var);
+            return $this->dump_array($var);
         elseif (is_object($var)) 
-            return static::dump_object($var);
+            return $this->dump_object($var);
         else
-            return static::dump_other($var);
+            return $this->dump_other($var);
     }
-    private static function dump_array(array $array) {
+    private function dump_array(array $array) {
+        if ($this->__current_depth++ > $this->__options['depth']) return;
         $count = count($array);
         $ret = ' type[<span class="type"> Array </span>] ';
         $ret .= '[ <span class="count">' . $count . '</span> ] elements</li>';
         if ($count > 0) {
             $ret .= '<ul>';
             foreach ($array as $key => $value) {
-                if (is_string($key)) $key = '<span>\'' . $key . '\'</span>';
+                if (is_string($key)) $key = '<span class="key">\'' . $key . '\'</span>';
                 $ret .= '<li>[ <span class="key">' . $key . '</span> ] => ';
-                $ret .= static::dump_it($value);
+                $ret .= $this->dump_it($value);
             }
             $ret .= '</ul>';
         }
         return $ret;    
     }
 
-    private static function dump_object($obj) {
-        $ret = ' type[<span class="type"> Object </span>] ';
+       // if ($this->__current_depth++ > $this->__options['depth']) return;
+    private function dump_object($obj) {
+        $hash = spl_object_hash($obj);
+        $id = substr($hash, 9, 7);
         $class = get_class($obj);
-        $ret .= ' class[ <span class="class">' . $class . '</span> ]</li>';
-        $ret .= '<ul class="properties"><li><span class="class">' . $class . '</span></li>';
+        //$ret = ' type[ <span class="type"> Object </span> ] ';
+        $ret = ' object[ <span class="class-id"> ' . $id . ' </span> ] ';
+        $ret .= ' class[ <span class="class">' . $class . '</span> ] </li>';
+        $ret .= '<ul class="properties">';
+        if ($this->__object_references[$hash]) 
+            return $ret . '<li><span class="empty"> -- Object recursion -- </span></li></ul>';
+        
+        $this->__object_references[$hash] = true;
+        
         $reflection = new \ReflectionObject($obj);
         $props = '';
         foreach (array(
@@ -67,14 +77,14 @@ class Debug {
             'protected' => \ReflectionProperty::IS_PROTECTED,
             'private' => \ReflectionProperty::IS_PRIVATE
             ) as $type => $rule) {
-            $props .= static::dump_properties($reflection, $obj, $type, $rule);
+            $props .= $this->dump_properties($reflection, $obj, $type, $rule);
         }
-        if ($props == '') $ret .= '<span class="empty"> -- No properties -- </span>';
-        else  $ret .= $props;
+        if ($props == '') return $ret .= '<li><span class="empty"> -- No properties -- </span></li></ul>';
+        else  $ret .=  $props;
         $ret .= '</ul>';
         return  $ret;
     }
-    private static function dump_properties($reflection, $obj, $type, $rule) {
+    private function dump_properties($reflection, $obj, $type, $rule) {
         $vars = $reflection->getProperties($rule);
         $i = 0; $ret = '';
         foreach ($vars as $refProp) {
@@ -82,24 +92,24 @@ class Debug {
             $refProp->setAccessible(true);
             $value = $refProp->getValue($obj);
             $ret .= '<li>';
-            $ret .= '[ <span>' . $refProp->getName() . '</span> ][ <span class="type">' . $type . '</span>] => ';
-            $ret .= static::dump_it($value);
+            $ret .= '[ <span class="property">' . $refProp->getName() . '</span> ][ <span class="access">' . $type . '</span>] => ';
+            $ret .= $this->dump_it($value);
             $ret .= '</li>';
         }
         return $i ? $ret : '';
     }
 
-    private static function dump_other($var) {
+    private function dump_other($var) {
         $type = gettype($var);
         switch ($type) {
             case 'boolean': $var = $var ? 'true' : 'false'; break;
             case 'string' : $var = '\'' . $var . '\''; break;
-            case 'NULL' : return '[ <span>NULL</span> ]'; break;
+            case 'NULL' : return '[ <span class="empty">NULL</span> ]'; break;
         }
-        return '[ <span class="type">' . $type . '</span> ][ <span>' . $var . '</span> ]';
+        return '[ <span class="type">' . $type . '</span> ][ <span class="value">' . $var . '</span> ]';
     }
 
-    private static function locationString($location) {
+    private function locationString($location) {
         extract($location);
         $ret = "line: <span>$line</span> &nbsp;".
                "file: <span>$file</span> &nbsp;";
@@ -108,7 +118,7 @@ class Debug {
         return $ret;
     }
 
-    private static function location($trace) {
+    private function location($trace) {
         $ret = array(
             'file' => $trace[0]['file'],
             'line' => $trace[0]['line']
@@ -120,15 +130,17 @@ class Debug {
 }
 
 function dd() {
+    $debug = new \Debug();
     $args = func_get_args();
     $trace = debug_backtrace();
     foreach ($args as $var) 
-        Debug::dump($var, compact('trace'));
+        $debug->dump($var, compact('trace'));
 };
 function ddd() {
+    $debug = new \Debug();
     $args = func_get_args();
     $trace = debug_backtrace();
     foreach ($args as $var) 
-        Debug::dump($var, compact('trace'));
+        $debug->dump($var, compact('trace'));
     die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
 }
