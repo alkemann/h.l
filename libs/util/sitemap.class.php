@@ -1,10 +1,10 @@
 <?php
 
-namespace site;
+namespace util;
 
 class Sitemap {
 
-    public static function analyze($whitelist = array(), $blacklist = array()) {
+    public static function generate($whitelist = array(), $blacklist = array()) {
         $whitelist += array('pages');
         $blacklist += array();
         return static::recursive('pages', CONTENT_PATH);
