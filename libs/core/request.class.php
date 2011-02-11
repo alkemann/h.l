@@ -37,7 +37,7 @@ class Request {
     public function viewToRender() {
         $ret = join(DS, $this->path()) . DS .
             $this->view() . '.' .
-            $this->type() . '.php';
+            $this->type();
         $ret = trim($ret, DS);
         return $ret;
     }
