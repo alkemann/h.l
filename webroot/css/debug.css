@@ -1,0 +1,11 @@
+div.debug-dump { margin: 10px 0; padding: 2px 4px; border: 1px dashed #acc;}
+.debug-dump ul { list-style: none; margin: 0; padding: 0 0 1em 1em; }
+.debug-dump ul.properties { border: 1px dashed #ccF; }
+.debug-dump li { padding: 0; margin: 0; list-style: none; }
+.debug-dump li:nth-child(odd) { background-color: #eee; }
+.debug-dump span { color: #C00; font-weight: bold; }
+.debug-dump span.type { color: #009;  font-weight: normal; }
+.debug-dump span.location { color: #336;  font-weight: normal; }
+.debug-dump span.key { color: #304;  font-weight: normal; }
+.debug-dump span.count { color: #044;  font-weight: normal; }
+.debug-dump span.class { color: #282;  font-weight: bold; }
