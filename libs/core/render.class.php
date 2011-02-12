@@ -6,8 +6,19 @@ namespace core;
 
 class Render {
 
+    protected $_request;
+
+    public function __construct($requestObj) {
+        $this->_request = $requestObj;
+    }
+    
+    public function request() {
+        return $this->_request;
+    }
+
     public function head() {
         ob_start();
+        $render = $this;
         include LAYOUT_PATH . 'head.html.php';
         include LAYOUT_PATH . 'neck.html.php';
         $ret = ob_get_contents();
@@ -37,6 +48,15 @@ class Render {
         $ret = ob_get_contents();
         ob_end_clean();
         return $ret;
+    }
+
+    public function render() {
+        $view = $this->_request->viewToRender();
+        $rendered_view = $this->view($view);
+        $response = $this->head();
+        $response .= $rendered_view;
+        $response .= $this->foot();
+        echo $response;
     }
 
 }

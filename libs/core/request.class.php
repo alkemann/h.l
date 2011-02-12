@@ -5,6 +5,8 @@
  */
 namespace core;
 
+use \core\Router;
+
 class Request {
     
     protected $_url;
@@ -16,8 +18,8 @@ class Request {
     protected $_path;
     protected $_view;
 
-    public function __construct($_REQUEST) {
-        $this->_url = url_route($_REQUEST);
+    public function __construct() {
+        $this->_url = Router::request_to_url($_REQUEST);
         
         $parts = \explode('/', $this->_url);
         $last = \array_slice($parts, -1, 1, true);
@@ -45,4 +47,11 @@ class Request {
     public function path() { return $this->_path; }
     public function view() { return $this->_view; }
     public function type() { return $this->_type; }
+    
+    public function canon() {
+        $view = $this->viewToRender();
+        $view = str_replace('\\', '/', $view);
+        $base = 'http://hjemmesiden.l/'; //@todo get base url;
+        return $base . $view;
+    }
 }

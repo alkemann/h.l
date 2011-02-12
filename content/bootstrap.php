@@ -1,15 +1,7 @@
 <?php
 
-// Set up custom routes
-function url_route($requestUrl) {
+use \core\Router;
 
-    $requestUrl = is_array($requestUrl) && isset($requestUrl['url']) ? $requestUrl['url'] : '/';
-    $requestUrl = rtrim($requestUrl, '/');
-    $requestUrl = '/' . $requestUrl;
-    $aliases = array(
-        '/' => 'home',
-        '/start' => 'start/something/deep'
-    );
-    
-    return isset($aliases[$requestUrl]) ? $aliases[$requestUrl] : $requestUrl;
-}
+Router::alias('/', 'home');
+Router::alias('/start', 'some/thing/deep');
+Router::alias('/place', 'some/thing/deep');
