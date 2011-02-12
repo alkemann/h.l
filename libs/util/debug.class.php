@@ -127,18 +127,20 @@ class Debug {
     }
 }
 
+
 function dd() {
-    $debug = new \Debug();
+    $debug = new Debug();
     $args = func_get_args();
     $trace = debug_backtrace();
-    foreach ($args as $var) 
-        $debug->dump($var, compact('trace'));
+    foreach ($args as $var) $debug->dump($var, compact('trace'));
+    unset($debug);
 };
 function ddd() {
-    $debug = new \Debug();
+    $debug = new Debug();
     $args = func_get_args();
     $trace = debug_backtrace();
-    foreach ($args as $var) 
-        $debug->dump($var, compact('trace'));
+    foreach ($args as $var) $debug->dump($var, compact('trace'));
+    unset($debug);
     die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
 }
+
