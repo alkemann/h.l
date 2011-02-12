@@ -10,6 +10,7 @@ class Router {
     public static function request_to_url($requestUrl) {
         $requestUrl = is_array($requestUrl) && isset($requestUrl['url']) ? $requestUrl['url'] : '/';
         $requestUrl = rtrim($requestUrl, '/');
+        if (strrpos($requestUrl, '.html')) $requestUrl = substr($requestUrl, 0, -5);
         $requestUrl = '/' . $requestUrl;
         return isset(static::$_aliases[$requestUrl]) ? static::$_aliases[$requestUrl] : $requestUrl;
     }
