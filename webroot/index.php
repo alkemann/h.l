@@ -18,7 +18,7 @@ define('LOGS_PATH', ROOT . DS . RESOURCE_DIR . DS . 'logs' . DS);
 
 define('DEBUG', 1);
 
-require CORE_PATH . 'debug.class.php';
+require LIBS_PATH . 'util' . DS . 'debug.class.php';
 
 define('CLASS_DIR', LIBS_PATH); // USED BY SPL_AUTOLOADER
 set_include_path(get_include_path().PATH_SEPARATOR.CLASS_DIR);
