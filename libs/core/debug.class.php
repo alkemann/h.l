@@ -56,12 +56,10 @@ class Debug {
         return $ret;    
     }
 
-       // if ($this->__current_depth++ > $this->__options['depth']) return;
     private function dump_object($obj) {
         $hash = spl_object_hash($obj);
         $id = substr($hash, 9, 7);
         $class = get_class($obj);
-        //$ret = ' type[ <span class="type"> Object </span> ] ';
         $ret = ' object[ <span class="class-id"> ' . $id . ' </span> ] ';
         $ret .= ' class[ <span class="class">' . $class . '</span> ] </li>';
         $ret .= '<ul class="properties">';
