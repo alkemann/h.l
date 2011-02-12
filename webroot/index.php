@@ -29,9 +29,9 @@ $Dispatch = new \core\Dispatch();
 require CONTENT_PATH . 'bootstrap.php';
 
 try {
-    echo $Dispatch->run();
+    $Dispatch->run();
 } catch (Exception $e) { 
-    $errorHandler = new \core\ErrorHandler($e);
+    $errorHandler = new \core\exceptions\ErrorHandler($e);
     $errorHandler->dispatch($Dispatch);
     $errorHandler->deal(); 
 }
