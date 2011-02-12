@@ -1,4 +1,4 @@
-<?php
+<?php define('FIRST_APP_CONSTANT', 'FIRST_APP_CONSTANT');
 //** semi config
 define('CONTENT_DIR', 'content');
 define('LAYOUT_DIR', 'layout');

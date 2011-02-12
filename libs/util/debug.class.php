@@ -125,6 +125,19 @@ class Debug {
         if (isset($trace[1]['class'])) $ret['class'] = $trace[1]['class'];
         return $ret;
     }
+    
+    public function defines() {
+        $defines = get_defined_constants();
+        $ret = array(); $offset = -1;
+        while ($def = array_slice($defines, $offset--, 1)) {
+            $key = key($def);
+            $value = current($def);
+            if ($key  == 'FIRST_APP_CONSTANT') break;
+            $ret[$key ] = $value;
+        }
+        return $ret;
+    }
+
 }
 
 
