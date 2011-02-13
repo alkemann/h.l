@@ -1,15 +1,13 @@
 <h1>Sitemap</h1>
 <link rel="stylesheet" type="text/css" media="screen,print" href="/libs/slickmap/slickmap.css" />
-
+<div class="sitemap">
 		<ul id="utilityNav"> 
-			<li><a href="/register">Register</a></li> 
-			<li><a href="/login">Log In</a></li> 
-			<li><a href="/sitemap">Site Map</a></li> 
+			<li><a href="/sitemap.html">Site Map</a></li> 
 		</ul> 
  
 		<ul id="primaryNav" class="col4"> 
-			<li id="home"><a href="http://sitetitle.com">Home</a></li> 
-			<li><a href="/about">About Us</a> 
+			<li id="home"><a href="http://hjemmesiden.l">Home</a></li> 
+			<li><a href="/about.html">About Us</a> 
 				<ul> 
 					<li><a href="/history">Our History</a></li> 
 					<li><a href="/mission">Mission Statement</a></li> 
@@ -53,7 +51,7 @@
 				</ul> 
 			</li>	
 		</ul> 
- 
+ </div>
 <?php
 
-//dd(\util\Sitemap::generate());
+dd(\util\Sitemap::generate());
