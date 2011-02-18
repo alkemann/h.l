@@ -2,12 +2,28 @@
 /**
  * Global debug methods
  */
+namespace util;
 
 class Debug {
+
+    public static $options = array(
+        'echo' => true,
+        'depth' => 10
+    );
+    
+    private static $__instance = null;
 
     private $__current_depth;
     private $__object_references;
     private $__options;
+
+    public static function get_instance() {
+        if (!static::$__instance) {
+            $class = __CLASS__;
+            static::$__instance = new $class();
+        }
+        return static::$__instance;
+    }
 
     public function dump($var, $options = array()) {
         $options += array(
@@ -31,6 +47,19 @@ class Debug {
             '<br> ' . $dump . '</div>';
         if ($echo) echo $result;
     }
+
+    public function defines() {
+        $defines = get_defined_constants();
+        $ret = array(); $offset = -1;
+        while ($def = array_slice($defines, $offset--, 1)) {
+            $key = key($def);
+            $value = current($def);
+            if ($key  == 'FIRST_APP_CONSTANT') break;
+            $ret[$key ] = $value;
+        }
+        return $ret;
+    }
+
     private function dump_it($var) {
         if (is_array($var))
             return $this->dump_array($var);
@@ -39,6 +68,7 @@ class Debug {
         else
             return $this->dump_other($var);
     }
+
     private function dump_array(array $array) {
         if ($this->__current_depth++ > $this->__options['depth']) return;
         $count = count($array);
@@ -82,6 +112,7 @@ class Debug {
         $ret .= '</ul>';
         return  $ret;
     }
+
     private function dump_properties($reflection, $obj, $type, $rule) {
         $vars = $reflection->getProperties($rule);
         $i = 0; $ret = '';
@@ -125,35 +156,7 @@ class Debug {
         if (isset($trace[1]['class'])) $ret['class'] = $trace[1]['class'];
         return $ret;
     }
-    
-    public function defines() {
-        $defines = get_defined_constants();
-        $ret = array(); $offset = -1;
-        while ($def = array_slice($defines, $offset--, 1)) {
-            $key = key($def);
-            $value = current($def);
-            if ($key  == 'FIRST_APP_CONSTANT') break;
-            $ret[$key ] = $value;
-        }
-        return $ret;
-    }
 
 }
 
-
-function dd() {
-    $debug = new Debug();
-    $args = func_get_args();
-    $trace = debug_backtrace();
-    foreach ($args as $var) $debug->dump($var, compact('trace'));
-    unset($debug);
-};
-function ddd() {
-    $debug = new Debug();
-    $args = func_get_args();
-    $trace = debug_backtrace();
-    foreach ($args as $var) $debug->dump($var, compact('trace'));
-    unset($debug);
-    die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
-}
 

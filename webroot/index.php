@@ -18,12 +18,12 @@ define('LOGS_PATH', ROOT . DS . RESOURCE_DIR . DS . 'logs' . DS);
 
 define('DEBUG', 1);
 
-require LIBS_PATH . 'util' . DS . 'debug.class.php';
-
 define('CLASS_DIR', LIBS_PATH); // USED BY SPL_AUTOLOADER
 set_include_path(get_include_path().PATH_SEPARATOR.CLASS_DIR);
 spl_autoload_extensions('.class.php');
 spl_autoload_register();
+
+include LIBS_PATH . 'global_functions.inc';
 
 $Dispatch = new \core\Dispatch();
 require CONTENT_PATH . 'bootstrap.php';
