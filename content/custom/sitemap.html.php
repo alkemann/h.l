@@ -1,58 +1,47 @@
 <h1>Sitemap</h1>
 <link rel="stylesheet" type="text/css" media="screen,print" href="/libs/slickmap/slickmap.css" />
+<?php
+$sitemap = \util\Sitemap::generate();
+?>
 <div class="sitemap">
 		<ul id="utilityNav"> 
 			<li><a href="/sitemap.html">Site Map</a></li> 
 		</ul> 
  
-		<ul id="primaryNav" class="col4"> 
+        <ul id="primaryNav" class="col<?php count($sitemap);?>"> 
 			<li id="home"><a href="http://hjemmesiden.l">Home</a></li> 
-			<li><a href="/about.html">About Us</a> 
-				<ul> 
-					<li><a href="/history">Our History</a></li> 
-					<li><a href="/mission">Mission Statement</a></li> 
-					<li><a href="/principals">Principals</a></li> 
-				</ul> 
-			</li> 
-			<li><a href="/services">Services</a> 
-				<ul> 
-					<li><a href="/services/design">Graphic Design</a></li> 
-					<li><a href="/services/development">Web Development</a></li> 
-					<li><a href="/services/marketing">Internet Marketing</a> 
-						<ul> 
-							<li><a href="/social-media">Social Media</a></li> 
-							<li><a href="/optimization">Search Optimization</a></li> 
-							<li><a href="/adwords">Google AdWords</a></li> 
-						</ul> 
-					</li> 
-					<li><a href="/services/copywriting">Copywriting</a></li> 
-					<li><a href="/services/photography">Photography</a></li> 
-				</ul> 
-			</li> 
-			<li><a href="/projects">Projects</a> 
-				<ul> 
-					<li><a href="/projects/finance">Finance</a></li> 
-					<li><a href="/projects/medical">Medical</a></li> 
-					<li><a href="/projects/education">Education</a></li> 
-					<li><a href="/projects/professional">Professional</a></li> 
-					<li><a href="/projects/industrial">Industrial</a></li> 
-					<li><a href="/projects/commercial">Commercial</a></li>	
-					<li><a href="/projects/energy">Energy</a></li> 
-				</ul> 
-			</li> 
-			<li><a href="/contact">Contact</a> 
-				<ul> 
-					<li><a href="/contact/offices">Offices</a> 
-						<ul> 
-							<li><a href="contact/map">Map</a></li> 
-							<li><a href="contact/form">Contact Form</a></li> 
-						</ul> 
-					</li> 
-				</ul> 
-			</li>	
+<?php
+        foreach ($sitemap as $name => $contains) {
+            echo '<li>';
+            if (is_string($contains[0]))
+                echo '<a href="' . $contains[0] . '" >' . $name . '</a>';
+            $children = (isset($contains[1])) ? $contains[1] : $contains[0];
+            if (is_array($children)) {
+                echo '<ul>';
+                foreach ($children as $name1 => $contains1) {
+                    echo '<li>';
+                    if (is_string($contains1[0]))
+                        echo '<a href="' . $contains1[0] . '" >' . $name1 . '</a>';
+                    $children1 = (isset($contains1[1])) ? $contains1[1] : $contains1[0];
+                    if (is_array($children1)) {
+                        echo '<ul>';
+                        foreach ($children1 as $name2 => $contains2) {
+                            echo '<li>';
+                            if (is_string($contains2[0]))
+                                echo '<a href="' . $contains2[0] . '" >' . $name2 . '</a>';
+                            echo '</li>';
+                        }
+                        echo '</ul>';
+                    }
+
+                    echo '</li>';
+                }
+                echo '</ul>';
+            }
+            echo '</li>';
+        }
+?>
 		</ul> 
  </div>
 <?php
-
-dd(\util\Sitemap::generate());
 

@@ -7,7 +7,8 @@ class Sitemap {
     public static function generate($whitelist = array(), $blacklist = array()) {
         $whitelist += array('pages');
         $blacklist += array();
-        return static::recursive('pages', CONTENT_PATH);
+        $ret = static::recursive('pages', CONTENT_PATH);
+        return $ret;
     }
 
     private static function recursive($dir, $path) {
@@ -20,12 +21,16 @@ class Sitemap {
                     if (filetype($path.$dir.DS.$file) == 'dir') {
                         $subfolders[] = $file;
                     } else {
-                        $ret[] = $file;
+                        $url = '/' . substr($file, 0, -4);
+                        $arr = explode('.', $file);
+                        $name = $arr[0];
+                        $ret[$name] = array($url);
                     }
                 }
                 closedir($dirHandler);
                 foreach ($subfolders as $folder) {
-                    $ret[$folder] = static::recursive($folder, $path.$dir.DS);
+                    if (!isset($ret[$folder])) $ret[$folder] = array();
+                    $ret[$folder][] = static::recursive($folder, $path.$dir.DS);
                 }
             }
         }
