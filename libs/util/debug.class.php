@@ -8,7 +8,7 @@ class Debug {
 
     public static $options = array(
         'echo' => true,
-        'depth' => 10
+        'depth' => 10,
     );
     
     private static $__instance = null;
@@ -26,7 +26,7 @@ class Debug {
     }
 
     public function dump($var, $options = array()) {
-        $options += self::$options;
+        $options += self::$options + array('split' => false);
         $this->__options = $options;
         $this->__current_depth = 1;
         $this->__object_references = array();
@@ -35,7 +35,11 @@ class Debug {
         extract($options);
         $location = $this->location($trace);
 
-        $dump = $this->dump_it($var);
+        $dump = '';
+        if ($options['split'] && is_array($var))
+            foreach ($var as $one) $dump .= $this->dump_it($one) . '<br>-<br>';
+        else
+            $dump = $this->dump_it($var);
         
         $locString = $this->locationString($location);
         $result = '<style type="text/css">@import url("/css/debug.css");</style>';

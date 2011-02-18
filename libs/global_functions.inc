@@ -8,7 +8,12 @@ function d() {
     $debug = \util\Debug::get_instance();
     $args = func_get_args();
     $trace = debug_backtrace();
-    foreach ($args as $var) $debug->dump($var, compact('trace'));
+    $split = true;
+    if (count($args) == 1) {
+        $split = false;
+        $args = $args[0];
+    }
+    $debug->dump($args, compact('trace', 'split'));
 };
 
 // Debug dump any amount of variables and then die()
@@ -16,7 +21,12 @@ function dd() {
     $debug = \util\Debug::get_instance();
     $args = func_get_args();
     $trace = debug_backtrace();
-    foreach ($args as $var) $debug->dump($var, compact('trace'));
+    $split = true;
+    if (count($args) == 1) {
+        $split = false;
+        $args = $args[0];
+    }
+    $debug->dump($args, compact('trace', 'split'));
     die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
 }
 
