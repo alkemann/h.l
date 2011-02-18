@@ -28,7 +28,7 @@ class Debug {
     public function dump($var, $options = array()) {
         $options += self::$options + array('split' => false);
         $this->__options = $options;
-        $this->__current_depth = 1;
+        $this->__current_depth = 0;
         $this->__object_references = array();
         
         if (!$options['trace']) $options['trace'] = debug_backtrace();
@@ -36,9 +36,10 @@ class Debug {
         $location = $this->location($trace);
 
         $dump = '';
-        if ($options['split'] && is_array($var))
+        if ($options['split'] && is_array($var)) {
+            $this->__current_depth = 0;
             foreach ($var as $one) $dump .= $this->dump_it($one) . '<br>-<br>';
-        else
+        } else
             $dump = $this->dump_it($var);
         
         $locString = $this->locationString($location);
@@ -70,7 +71,7 @@ class Debug {
     }
 
     private function dump_array(array $array) {
-        if ($this->__current_depth++ > $this->__options['depth']) return;
+        $this->__current_depth++;
         $count = count($array);
         $ret = ' type[<span class="type"> Array </span>] ';
         $ret .= '[ <span class="count">' . $count . '</span> ] elements</li>';
@@ -79,10 +80,17 @@ class Debug {
             foreach ($array as $key => $value) {
                 if (is_string($key)) $key = '<span class="key">\'' . $key . '\'</span>';
                 $ret .= '<li>[ <span class="key">' . $key . '</span> ] => ';
+                if (is_array($value) && $this->__current_depth >= $this->__options['depth']) {
+                    $ret .= ' type[<span class="type"> Array </span>] ';
+                    $ret .= '[ <span class="count">' . count($value) . '</span> ] elements</li>';
+                    $ret .= '<ul><li><span class="empty"> -- Array Depth reached -- </span></li></ul>';
+                    continue;
+                }
                 $ret .= $this->dump_it($value);
             }
             $ret .= '</ul>';
         }
+        $this->__current_depth--;
         return $ret;    
     }
 
