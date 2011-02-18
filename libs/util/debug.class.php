@@ -26,11 +26,7 @@ class Debug {
     }
 
     public function dump($var, $options = array()) {
-        $options += array(
-            'trace' => null,
-            'echo' => true,
-            'depth' => 10
-        );
+        $options += self::$options;
         $this->__options = $options;
         $this->__current_depth = 1;
         $this->__object_references = array();

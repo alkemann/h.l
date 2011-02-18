@@ -8,7 +8,7 @@ function d() {
     $debug = \util\Debug::get_instance();
     $args = func_get_args();
     $trace = debug_backtrace();
-    foreach ($args as $var) $debug->dump($args, compact('trace'));
+    foreach ($args as $var) $debug->dump($var, compact('trace'));
 };
 
 // Debug dump any amount of variables and then die()
