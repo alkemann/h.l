@@ -150,7 +150,7 @@ class Debug {
         $type = gettype($var);
         switch ($type) {
             case 'boolean': $var = $var ? 'true' : 'false'; break;
-            case 'string' : $var = '\'' . $var . '\''; break;
+            case 'string' : $var = '\'' . htmlentities($var) . '\''; break;
             case 'NULL' : return '[ <span class="empty">NULL</span> ]'; break;
         }
         return '[ <span class="type">' . $type . '</span> ][ <span class="value">' . $var . '</span> ]';
