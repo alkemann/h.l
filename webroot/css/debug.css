@@ -2,6 +2,7 @@ div.debug-dump { background: #fe8; font-size: 13px; display: inline-block; margi
 .debug-dump ul { list-style: none; margin: 0; padding: 0 0 5px 1em; }
 .debug-dump ul.properties { border-left: 1px dashed #559; }
 .debug-dump ul.array { border-left: 1px dashed #955; }
+div.debug-dump > ul { border: 0 !important; }
 .debug-dump li { padding: 0; margin: 0; list-style: none; border-bottom: 1px solid #446; }
 .debug-dump span { color: #C00; }
 .debug-dump span.value { color: #C00; font-weight: bold; font-size: 15px; }
