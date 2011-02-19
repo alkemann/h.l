@@ -1,7 +1,12 @@
 <?php
-\util\Debug::$options['depth'] = 2;
-\util\Debug::$options['avoid'][] = 'array';
-\util\Debug::$options['avoid'][] = 'object';
+//\util\Debug::$options['depth'] = 2;
+//\util\Debug::$options['avoid'][] = 'array';
+//\util\Debug::$options['avoid'][] = 'object';
+ds('blacklist', array(
+    'keys' => array('level 5'),
+    'objects' => array('util\Debug'),
+    'properties' => array()
+)); 
 d(
     true,
     123,

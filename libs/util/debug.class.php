@@ -13,7 +13,7 @@ class Debug {
         'blacklist' => array(
             'objects' => array(),
             'properties' => array(),
-            'array_keys' => array()
+            'keys' => array()
         )
     );
     
@@ -87,8 +87,11 @@ class Debug {
                 $ret .= '<li><span class="empty"> -- Array Type Avoided -- </span></li>';
             } else 
                 foreach ($array as $key => $value) {
-                    if (is_string($key)) $key = '<span class="key">\'' . $key . '\'</span>';
                     $ret .= '<li>[ <span class="key">' . $key . '</span> ] => ';
+                    if (is_string($key) && in_array($key, $this->__options['blacklist']['keys'])) {
+                        $ret .= '<span class="empty"> -- Blacklisted Key Avoided -- </span></li>';
+                        continue;
+                    }
                     if ((is_array($value) || is_object($value)) && $this->__current_depth >= $this->__options['depth']) {
                         $ret .= ' type[<span class="type"> Array </span>] ';
                         $ret .= '[ <span class="count">' . count($value) . '</span> ] elements</li>';
