@@ -84,10 +84,10 @@ class Debug {
                 foreach ($array as $key => $value) {
                     if (is_string($key)) $key = '<span class="key">\'' . $key . '\'</span>';
                     $ret .= '<li>[ <span class="key">' . $key . '</span> ] => ';
-                    if (is_array($value) && $this->__current_depth >= $this->__options['depth']) {
+                    if ((is_array($value) || is_object($value)) && $this->__current_depth >= $this->__options['depth']) {
                         $ret .= ' type[<span class="type"> Array </span>] ';
                         $ret .= '[ <span class="count">' . count($value) . '</span> ] elements</li>';
-                        $ret .= '<ul><li><span class="empty"> -- Array Depth reached -- </span></li></ul>';
+                        $ret .= '<ul><li><span class="empty"> -- Debug Depth reached -- </span></li></ul>';
                         continue;
                     }
                     $ret .= $this->dump_it($value);
