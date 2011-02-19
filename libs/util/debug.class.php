@@ -9,7 +9,12 @@ class Debug {
     public static $options = array(
         'echo' => true,
         'depth' => 10,
-        'avoid' => array()
+        'avoid' => array(),
+        'blacklist' => array(
+            'objects' => array(),
+            'properties' => array(),
+            'array_keys' => array()
+        )
     );
     
     private static $__instance = null;
@@ -110,10 +115,11 @@ class Debug {
             return $ret . '<li><span class="empty"> -- Object Recursion Avoided -- </span></li></ul>';
         if (in_array('object', $this->__options['avoid'])) 
             return $ret . '<li><span class="empty"> -- Object Type Avoided -- </span></li></ul>';
-        $this->__object_references[$hash] = true;
-        if ($this->__current_depth > $this->__options['depth']) {
+        if ($this->__current_depth > $this->__options['depth'])
             return $ret . '<li><span class="empty"> -- Debug Depth reached -- </span></li></ul>';
-        }
+        if (in_array(get_class($obj), $this->__options['blacklist']['objects']))
+            return $ret . '<li><span class="empty"> -- Blacklisted Object Avoided -- </span></li></ul>';
+        $this->__object_references[$hash] = true;
         $reflection = new \ReflectionObject($obj);
         $props = '';
         foreach (array(
