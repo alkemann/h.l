@@ -101,7 +101,7 @@ class Debug {
         $ret = ' object[ <span class="class-id"> ' . $id . ' </span> ] ';
         $ret .= ' class[ <span class="class">' . $class . '</span> ] </li>';
         $ret .= '<ul class="properties">';
-        if ($this->__object_references[$hash]) 
+        if (isset($this->__object_references[$hash])) 
             return $ret . '<li><span class="empty"> -- Object recursion -- </span></li></ul>';
         
         $this->__object_references[$hash] = true;
