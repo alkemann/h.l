@@ -26,6 +26,8 @@ function dd() {
         $split = false;
         $args = $args[0];
     }
+
+    ob_clean();
     $debug->dump($args, compact('trace', 'split'));
     die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
 }
