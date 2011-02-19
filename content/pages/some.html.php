@@ -1,8 +1,12 @@
 <?php
 \util\Debug::$options['depth'] = 2;
+\util\Debug::$options['avoid'][] = 'array';
+\util\Debug::$options['avoid'][] = 'object';
 d(
-    array(4,5,6),
-    array(array(array(3=>3))),
+    true,
+    123,
+    new stdClass(),
+    \util\Debug::get_instance(),
     array('one' => 1, 'two' => 2, 'three' => array('3')),
     array(
         'level 1' => array(

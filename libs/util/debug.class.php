@@ -9,6 +9,7 @@ class Debug {
     public static $options = array(
         'echo' => true,
         'depth' => 10,
+        'avoid' => array()
     );
     
     private static $__instance = null;
@@ -77,17 +78,20 @@ class Debug {
         $ret .= '[ <span class="count">' . $count . '</span> ] elements</li>';
         if ($count > 0) {
             $ret .= '<ul>';
-            foreach ($array as $key => $value) {
-                if (is_string($key)) $key = '<span class="key">\'' . $key . '\'</span>';
-                $ret .= '<li>[ <span class="key">' . $key . '</span> ] => ';
-                if (is_array($value) && $this->__current_depth >= $this->__options['depth']) {
-                    $ret .= ' type[<span class="type"> Array </span>] ';
-                    $ret .= '[ <span class="count">' . count($value) . '</span> ] elements</li>';
-                    $ret .= '<ul><li><span class="empty"> -- Array Depth reached -- </span></li></ul>';
-                    continue;
+            if (in_array('array', $this->__options['avoid'])) {
+                $ret .= '<li><span class="empty"> -- Array Type Avoided -- </span></li>';
+            } else 
+                foreach ($array as $key => $value) {
+                    if (is_string($key)) $key = '<span class="key">\'' . $key . '\'</span>';
+                    $ret .= '<li>[ <span class="key">' . $key . '</span> ] => ';
+                    if (is_array($value) && $this->__current_depth >= $this->__options['depth']) {
+                        $ret .= ' type[<span class="type"> Array </span>] ';
+                        $ret .= '[ <span class="count">' . count($value) . '</span> ] elements</li>';
+                        $ret .= '<ul><li><span class="empty"> -- Array Depth reached -- </span></li></ul>';
+                        continue;
+                    }
+                    $ret .= $this->dump_it($value);
                 }
-                $ret .= $this->dump_it($value);
-            }
             $ret .= '</ul>';
         }
         $this->__current_depth--;
@@ -102,8 +106,9 @@ class Debug {
         $ret .= ' class[ <span class="class">' . $class . '</span> ] </li>';
         $ret .= '<ul class="properties">';
         if (isset($this->__object_references[$hash])) 
-            return $ret . '<li><span class="empty"> -- Object recursion -- </span></li></ul>';
-        
+            return $ret . '<li><span class="empty"> -- Object Recursion Avoided -- </span></li></ul>';
+        if (in_array('object', $this->__options['avoid'])) 
+            return $ret . '<li><span class="empty"> -- Object Type Avoided -- </span></li></ul>';
         $this->__object_references[$hash] = true;
         
         $reflection = new \ReflectionObject($obj);
