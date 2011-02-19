@@ -21,14 +21,14 @@ $sitemap = \util\Sitemap::generate();
                 foreach ($children as $name1 => $contains1) {
                     echo '<li>';
                     if (is_string($contains1[0]))
-                        echo '<a href="' . $contains1[0] . '" >' . $name1 . '</a>';
+                        echo '<a href="/' . $name . '/' . $contains1[0] . '" >' . $name1 . '</a>';
                     $children1 = (isset($contains1[1])) ? $contains1[1] : $contains1[0];
                     if (is_array($children1)) {
                         echo '<ul>';
                         foreach ($children1 as $name2 => $contains2) {
                             echo '<li>';
                             if (is_string($contains2[0]))
-                                echo '<a href="' . $contains2[0] . '" >' . $name2 . '</a>';
+                                echo '<a href="/' . $name . '/' . $name1 . $contains2[0] . '" >' . $name2 . '</a>';
                             echo '</li>';
                         }
                         echo '</ul>';
