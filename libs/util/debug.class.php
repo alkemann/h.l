@@ -114,14 +114,22 @@ class Debug {
         $ret = ' object[ <span class="class-id"> ' . $id . ' </span> ] ';
         $ret .= ' class[ <span class="class">' . $class . '</span> ] </li>';
         $ret .= '<ul class="properties">';
-        if (isset($this->__object_references[$hash])) 
-            return $ret . '<li><span class="empty"> -- Object Recursion Avoided -- </span></li></ul>';
-        if (in_array('object', $this->__options['avoid'])) 
-            return $ret . '<li><span class="empty"> -- Object Type Avoided -- </span></li></ul>';
-        if ($this->__current_depth > $this->__options['depth'])
-            return $ret . '<li><span class="empty"> -- Debug Depth reached -- </span></li></ul>';
-        if (in_array(get_class($obj), $this->__options['blacklist']['objects']))
+        if (in_array(get_class($obj), $this->__options['blacklist']['objects'])) {
+            $this->__current_depth--;
             return $ret . '<li><span class="empty"> -- Blacklisted Object Avoided -- </span></li></ul>';
+        }
+        if (isset($this->__object_references[$hash]))  {
+            $this->__current_depth--;
+            return $ret . '<li><span class="empty"> -- Object Recursion Avoided -- </span></li></ul>';
+        }
+        if (in_array('object', $this->__options['avoid']))  {
+            $this->__current_depth--;
+            return $ret . '<li><span class="empty"> -- Object Type Avoided -- </span></li></ul>';
+        }
+        if ($this->__current_depth > $this->__options['depth']) {
+            $this->__current_depth--;
+            return $ret . '<li><span class="empty"> -- Debug Depth reached -- </span></li></ul>';
+        }
         $this->__object_references[$hash] = true;
         $reflection = new \ReflectionObject($obj);
         $props = '';
@@ -129,8 +137,7 @@ class Debug {
             'public' => \ReflectionProperty::IS_PUBLIC,
             'protected' => \ReflectionProperty::IS_PROTECTED,
             'private' => \ReflectionProperty::IS_PRIVATE
-            ) as $type => $rule) { // (is_array($value) || is_object($value)) && 
-                
+            ) as $type => $rule) {                
                 $props .= $this->dump_properties($reflection, $obj, $type, $rule);
         }
         $this->__current_depth--;
@@ -144,12 +151,16 @@ class Debug {
         $vars = $reflection->getProperties($rule);
         $i = 0; $ret = '';
         foreach ($vars as $refProp) {
+            $property = $refProp->getName();
             $i++;
             $refProp->setAccessible(true);
             $value = $refProp->getValue($obj);
             $ret .= '<li>';
-            $ret .= '[ <span class="property">' . $refProp->getName() . '</span> ][ <span class="access">' . $type . '</span>] => ';
-            $ret .= $this->dump_it($value);
+            $ret .= '[ <span class="property">' . $property . '</span> ][ <span class="access">' . $type . '</span>] => ';
+            if (in_array($property, $this->__options['blacklist']['properties']))
+                $ret .= '<span class="empty"> -- Blacklisted Property Avoided -- </span>';
+            else
+                $ret .= $this->dump_it($value);
             $ret .= '</li>';
         }
         return $i ? $ret : '';
