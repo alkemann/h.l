@@ -30,6 +30,10 @@ function dd() {
     die('<div style="margin-top: 25px;font-size: 10px;color: #500;">-Debug die-</div>');
 }
 
+// Convenient way of adding / setting a Debug setting
+function ds($setting, $value) {
+    \util\Debug::$options[$setting] = $value;
+}
 // Convenient wrapper for other \util\Debug methods
 function dw($method, $echo = true) {
     $debug = \util\Debug::get_instance();
