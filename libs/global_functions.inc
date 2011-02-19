@@ -36,6 +36,31 @@ function dd() {
 function ds($setting, $value) {
     \util\Debug::$options[$setting] = $value;
 }
+
+function dsb($value, $category = 'objects') {
+    if (is_array($value)) {
+        \util\Debug::$options['blacklist'][$category] = $value;
+        return;
+    }
+    \util\Debug::$options['blacklist'][$category][] = $value;
+}
+
+// Extra short way of adding a blacklisted object property
+function dbk($value) {
+    $category = 'key';
+    dsb($value, $category);
+}
+// Extra short way of adding a blacklisted object property
+function dbp($value) {
+    $category = 'property';
+    dsb($value, $category);
+}
+// Extra short way of adding a blacklisted class instance
+function dbc($value) {
+    $category = 'class';
+    dsb($value, $category);
+}
+
 // Convenient wrapper for other \util\Debug methods
 function dw($method, $echo = true) {
     $debug = \util\Debug::get_instance();

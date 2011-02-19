@@ -11,9 +11,9 @@ class Debug {
         'depth' => 10,
         'avoid' => array(),
         'blacklist' => array(
-            'objects' => array(),
-            'properties' => array(),
-            'keys' => array()
+            'class' => array(),
+            'property' => array(),
+            'key' => array()
         )
     );
     
@@ -88,7 +88,7 @@ class Debug {
             } else 
                 foreach ($array as $key => $value) {
                     $ret .= '<li>[ <span class="key">' . $key . '</span> ] => ';
-                    if (is_string($key) && in_array($key, $this->__options['blacklist']['keys'])) {
+                    if (is_string($key) && in_array($key, $this->__options['blacklist']['key'])) {
                         $ret .= '<span class="empty"> -- Blacklisted Key Avoided -- </span></li>';
                         continue;
                     }
@@ -114,7 +114,7 @@ class Debug {
         $ret = ' object[ <span class="class-id"> ' . $id . ' </span> ] ';
         $ret .= ' class[ <span class="class">' . $class . '</span> ] </li>';
         $ret .= '<ul class="properties">';
-        if (in_array(get_class($obj), $this->__options['blacklist']['objects'])) {
+        if (in_array(get_class($obj), $this->__options['blacklist']['class'])) {
             $this->__current_depth--;
             return $ret . '<li><span class="empty"> -- Blacklisted Object Avoided -- </span></li></ul>';
         }
@@ -157,7 +157,7 @@ class Debug {
             $value = $refProp->getValue($obj);
             $ret .= '<li>';
             $ret .= '[ <span class="property">' . $property . '</span> ][ <span class="access">' . $type . '</span>] => ';
-            if (in_array($property, $this->__options['blacklist']['properties']))
+            if (in_array($property, $this->__options['blacklist']['property']))
                 $ret .= '<span class="empty"> -- Blacklisted Property Avoided -- </span>';
             else
                 $ret .= $this->dump_it($value);
