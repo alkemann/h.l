@@ -39,7 +39,7 @@ class Debug {
         $dump = '';
         if ($options['split'] && is_array($var)) {
             $this->__current_depth = 0;
-            foreach ($var as $one) $dump .= $this->dump_it($one) . '<br>-<br>';
+            foreach ($var as $one) $dump .= $this->dump_it($one) . '<div>-</div>';
         } else
             $dump = $this->dump_it($var);
         
