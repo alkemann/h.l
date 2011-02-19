@@ -99,6 +99,7 @@ class Debug {
     }
 
     private function dump_object($obj) {
+        $this->__current_depth++;
         $hash = spl_object_hash($obj);
         $id = substr($hash, 9, 7);
         $class = get_class($obj);
@@ -110,16 +111,20 @@ class Debug {
         if (in_array('object', $this->__options['avoid'])) 
             return $ret . '<li><span class="empty"> -- Object Type Avoided -- </span></li></ul>';
         $this->__object_references[$hash] = true;
-        
+        if ($this->__current_depth > $this->__options['depth']) {
+            return $ret . '<li><span class="empty"> -- Debug Depth reached -- </span></li></ul>';
+        }
         $reflection = new \ReflectionObject($obj);
         $props = '';
         foreach (array(
             'public' => \ReflectionProperty::IS_PUBLIC,
             'protected' => \ReflectionProperty::IS_PROTECTED,
             'private' => \ReflectionProperty::IS_PRIVATE
-            ) as $type => $rule) {
-            $props .= $this->dump_properties($reflection, $obj, $type, $rule);
+            ) as $type => $rule) { // (is_array($value) || is_object($value)) && 
+                
+                $props .= $this->dump_properties($reflection, $obj, $type, $rule);
         }
+        $this->__current_depth--;
         if ($props == '') return $ret .= '<li><span class="empty"> -- No properties -- </span></li></ul>';
         else  $ret .=  $props;
         $ret .= '</ul>';
