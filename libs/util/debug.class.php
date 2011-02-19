@@ -77,7 +77,7 @@ class Debug {
         $ret = ' type[<span class="type"> Array </span>] ';
         $ret .= '[ <span class="count">' . $count . '</span> ] elements</li>';
         if ($count > 0) {
-            $ret .= '<ul>';
+            $ret .= '<ul class="array">';
             if (in_array('array', $this->__options['avoid'])) {
                 $ret .= '<li><span class="empty"> -- Array Type Avoided -- </span></li>';
             } else 
