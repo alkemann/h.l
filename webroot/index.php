@@ -15,6 +15,7 @@ define('LAYOUT_PATH', CONTENT_PATH . LAYOUT_DIR . DS);
 define('LIBS_PATH', ROOT . DS . LIB_DIR . DS);
 define('CORE_PATH', LIBS_PATH . CORE_DIR . DS);
 define('LOGS_PATH', ROOT . DS . RESOURCE_DIR . DS . 'logs' . DS);
+define('LOCALES_PATH', ROOT . DS . RESOURCE_DIR . DS . 'locales' . DS);
 
 define('DEBUG', 1);
 
