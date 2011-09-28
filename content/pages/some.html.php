@@ -3,15 +3,16 @@
 //\util\Debug::$options['avoid'][] = 'array';
 //\util\Debug::$options['avoid'][] = 'object';
 ds('blacklist', array(
-    'keys' => array('level 5'),
-    'objects' => array('util\Debug'),
-    'properties' => array()
+    'key' => array('level 5'),
+    'object' => array('util\Debug'),
+    'property' => array(),
+    'class' => array()
 )); 
 d(
     true,
     123,
     new stdClass(),
-    \util\Debug::get_instance(),
+    al13_debug\util\Debug::get_instance(),
     array('one' => 1, 'two' => 2, 'three' => array('3')),
     array(
         'level 1' => array(
