@@ -2,7 +2,7 @@
 /**
  * Dispatch for Request and Route jobs
  */
-namespace core;
+namespace hl\core;
 
 class Dispatch {
     

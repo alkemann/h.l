@@ -20,16 +20,16 @@ define('DEBUG', 1);
 
 define('CLASS_DIR', LIBS_PATH); // USED BY SPL_AUTOLOADER
 set_include_path(get_include_path().PATH_SEPARATOR.CLASS_DIR);
-spl_autoload_extensions('.class.php');
+spl_autoload_extensions('.php');
 spl_autoload_register();
 
-$Dispatch = new \core\Dispatch();
+$Dispatch = new hl\core\Dispatch();
 require CONTENT_PATH . 'bootstrap.php';
 
 try {
     $Dispatch->run();
 } catch (Exception $e) { 
-    $errorHandler = new \core\exceptions\ErrorHandler($e);
+    $errorHandler = new hl\core\exceptions\ErrorHandler($e);
     $errorHandler->dispatch($Dispatch);
     $errorHandler->deal(); 
 }

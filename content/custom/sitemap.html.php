@@ -1,7 +1,7 @@
 <h1>Sitemap</h1>
 <link rel="stylesheet" type="text/css" media="screen,print" href="/libs/slickmap/slickmap.css" />
 <?php
-$sitemap = \util\Sitemap::generate();
+$sitemap = hl\util\Sitemap::generate();
 ?>
 <div class="sitemap">
 		<ul id="utilityNav"> 

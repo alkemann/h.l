@@ -1,6 +1,6 @@
 <?php
 
-namespace util;
+namespace hl\util;
 
 class Sitemap {
 

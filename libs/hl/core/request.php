@@ -3,9 +3,9 @@
  *
  *
  */
-namespace core;
+namespace hl\core;
 
-use \core\Router;
+use hl\core\Router;
 
 class Request {
 

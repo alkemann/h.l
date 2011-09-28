@@ -2,7 +2,7 @@
 /**
  * Merge view with layout files, set headers and return;
  */
-namespace core;
+namespace hl\core;
 
 class Render {
 

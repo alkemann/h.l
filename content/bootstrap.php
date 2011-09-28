@@ -1,7 +1,8 @@
 <?php
 
 if (!defined('LIBPATH')) define('LIBPATH', __DIR__.'/../libs');
-use \core\Router;
+
+use hl\core\Router;
 
 Router::alias('/', 'home');
 Router::alias('/index', 'home');
