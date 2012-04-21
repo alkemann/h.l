@@ -5,8 +5,12 @@ namespace hl\core\exceptions;
 class InvalidUrlException extends BaseException {
 
     public function __toString() {
-        return __CLASS__ . " <br>\n<br>".
-        "View file not found! <br>\n<br>".
-        'Create it at: <strong style="color:blue">' . $this->message . '</strong><br><br>';
-    }
+
+        return <<<MESSAGE
+<h1>Invalid URL or no such view found</h1>
+<h4>InvalidUrlException</h4>
+<p>View file not found!</p>
+<p>Create it at: <strong style="color:blue"> {$this->message} </strong></p>
+MESSAGE;
+	}
 }

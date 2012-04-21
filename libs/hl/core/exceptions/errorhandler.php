@@ -17,11 +17,11 @@ class ErrorHandler {
 
     public function deal() {
         if (DEBUG === 0) return $this->production();
-        throw $this->_exception;
+        $this->_dispatch->raw((string) $this->_exception);
     }
 
     public function production() {
-        if ($this->_exception instanceof \core\exceptions\InvalidUrlException) {
+        if ($this->_exception instanceof \hl\core\exceptions\InvalidUrlException) {
             header("HTTP/1.0 404 Not Found");
             $errorPage = CONTENT_PATH . 'custom' . DS . 'error404.html.php';
             if (file_exists($errorPage)) {

@@ -31,7 +31,7 @@ class Render {
         if (!file_exists($file)) {
             $customFile = CONTENT_PATH . 'custom' . DS . $view . '.php';
             if (!file_exists($customFile)) 
-                throw new \core\exceptions\InvalidUrlException($file);
+                throw new \hl\core\exceptions\InvalidUrlException($file);
             else 
                 $file = $customFile;
         }
@@ -50,11 +50,13 @@ class Render {
         return $ret;
     }
 
-    public function render() {
-        $view = $this->_request->viewToRender();
-        $rendered_view = $this->view($view);
+    public function render($content = null) {
+        if (!$content) {
+            $view = $this->_request->viewToRender();
+            $content = $this->view($view);
+        }
         $response = $this->head();
-        $response .= $rendered_view;
+        $response .= $content;
         $response .= $this->foot();
         echo $response;
     }

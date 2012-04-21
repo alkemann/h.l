@@ -18,8 +18,9 @@ function __($id, $options = null, $echo = true) {
     if (is_bool($options)) {
         $echo = $options;
         $options = array();
+    } elseif (!is_array($options)) {
+        $options =array();
     }
-    $options = is_array($options) ? $options : array();
     $result = Message::translate($id, $options);
     if ($echo)
         echo $result;
@@ -31,8 +32,9 @@ function __n($singularId, $pluralId, $nr, $options = null, $echo = true) {
     if (is_bool($options)) {
         $echo = $options;
         $options = array();
+    } elseif (!is_array($options)) {
+        $options =array();
     }
-    $options = is_array($options) ? $options : array();
     $result = (abs($nr) == 1) ?
         Message::translate($singularId, $options)
             :

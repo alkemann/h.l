@@ -15,4 +15,10 @@ class Dispatch {
         $this->_render->render();
     }
 
+    public function raw($content) {
+    	if (!$this->_render) {
+	        $this->_render = new Render($this->_requestObj);
+	    }
+        $this->_render->render($content);
+    }
 }
