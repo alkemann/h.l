@@ -11,7 +11,7 @@ class Render {
     public function __construct($requestObj) {
         $this->_request = $requestObj;
     }
-    
+
     public function request() {
         return $this->_request;
     }
@@ -19,8 +19,16 @@ class Render {
     public function head() {
         ob_start();
         $render = $this;
-        include LAYOUT_PATH . 'head.html.php';
-        include LAYOUT_PATH . 'neck.html.php';
+        $type = $this->_request->type();
+
+        $headfile = LAYOUT_PATH . 'head.' . $type . '.php';
+        if (file_exists($headfile))
+            include $headfile;
+
+        $neckfile = LAYOUT_PATH . 'neck.' . $type . '.php';
+        if (file_exists($neckfile))
+            include $neckfile;
+
         $ret = ob_get_contents();
         ob_end_clean();
         return $ret;
@@ -43,14 +51,21 @@ class Render {
     }
 
     public function foot() {
+
+        $footfile = LAYOUT_PATH . 'foot.' . $type . '.php';
+        if (!file_exists($neckfile))
+            return '';
+
         ob_start();
-        include LAYOUT_PATH . 'foot.html.php';
+        include $footfile;
         $ret = ob_get_contents();
         ob_end_clean();
         return $ret;
     }
 
     public function render($content = null) {
+        $contentType = $this->_request->contentType();
+        header("Content-type: $contentType");
         if (!$content) {
             $view = $this->_request->viewToRender();
             $content = $this->view($view);

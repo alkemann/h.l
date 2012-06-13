@@ -13,6 +13,7 @@ class Request {
     protected $_fullUrl;
     protected $_type = 'html';
     protected $_validTypes = array('html','json');
+    protected $_contentTypes = array('html' => 'text/html', 'json' => 'application/json');
     protected $_static;
     protected $_webroot;
     protected $_path;
@@ -47,6 +48,14 @@ class Request {
     public function path() { return $this->_path; }
     public function view() { return $this->_view; }
     public function type() { return $this->_type; }
+    public function validType() { return in_array($this->type(), $this->_validTypes); }
+    public function contentType() {
+        if ($this->validType()) {
+            return $this->_contentTypes[$this->type()];
+        } else {
+            return "text/html";
+        }
+    }
 
     public function canon() {
         $view = $this->viewToRender();
