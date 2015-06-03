@@ -2,7 +2,7 @@
 /**
  * Global debug methods
  */
-namespace al13_debug\util;
+namespace alkemann\hl\debug\util;
 
 class Debug {
 
@@ -24,12 +24,12 @@ class Debug {
     public $current_depth;
     public $object_references;
     public $options;
-    public $output = array('<style type="text/css">@import url("/al13/css/debug.css");</style>');
+    public $output = array('<style type="text/css">@import url("/css/debug.css");</style>');
 
 	/**
 	 * Get the singleton instance
 	 *
-	 * @return al13_debug\util\Debug
+	 * @return alkemann\hl\debug\util\Debug
 	 */
     public static function get_instance() {
         if (!static::$__instance) {
@@ -67,7 +67,7 @@ class Debug {
 
         switch ($mode) {
 			case 'FirePHP':
-				$locString = \al13_debug\util\adapters\FirePHP::locationString($location);
+				$locString = \alkemann\hl\debug\util\adapters\FirePHP::locationString($location);
 				require_once LITHIUM_LIBRARY_PATH . '/FirePHPCore/FirePHP.class.php';
 				$firephp = \FirePHP::getInstance(true);
 				if (!$firephp) throw new \Exception('FirePHP not installed');
@@ -86,17 +86,17 @@ class Debug {
 				return;
 				break;
 			case 'Json':
-				$locString = \al13_debug\util\adapters\Json::locationString($location);
+				$locString = \alkemann\hl\debug\util\adapters\Json::locationString($location);
 				$this->output[] = array('location' => $locString, 'dump' => $dump);
 				break;
 			case 'Log' :
-				$locString = \al13_debug\util\adapters\Log::locationString($location);
+				$locString = \alkemann\hl\debug\util\adapters\Log::locationString($location);
 				\lithium\analysis\Logger::debug($locString . "\n" . implode("\n", $dump));
 				return;
 				break;
 			case 'Html' :
 			default :
-				$locString = \al13_debug\util\adapters\Html::locationString($location);
+				$locString = \alkemann\hl\debug\util\adapters\Html::locationString($location);
 				$this->output[] = '<div class="debug-dump"><div class="debug-location">' . $locString . '</div>'.
 					'<div class="debug-content"> ' . implode("<br>\n", $dump) . '</div></div>';
 				break;
@@ -130,7 +130,7 @@ class Debug {
 	 */
 	public function out($key = null) {
 		if ($this->options['mode'] == 'Html') {
-			\al13_debug\util\adapters\Html::top($this->output, $key);
+			\alkemann\hl\debug\util\adapters\Html::top($this->output, $key);
 			return;
 		}
 		$this->__out($key);
@@ -174,7 +174,7 @@ class Debug {
 	 * @return string
 	 */
     public function dump_it($var) {
-		$adapter = '\al13_debug\util\adapters\\'. $this->options['mode'];
+		$adapter = '\alkemann\hl\debug\util\adapters\\'. $this->options['mode'];
         if (is_array($var))
             return $adapter::dump_array($var, $this);
         elseif (is_object($var))

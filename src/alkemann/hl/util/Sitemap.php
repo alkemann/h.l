@@ -1,6 +1,6 @@
 <?php
 
-namespace hl\util;
+namespace alkemann\hl\util;
 
 class Sitemap {
 

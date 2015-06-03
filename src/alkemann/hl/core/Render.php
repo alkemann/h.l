@@ -2,7 +2,7 @@
 /**
  * Merge view with layout files, set headers and return;
  */
-namespace hl\core;
+namespace alkemann\hl\core;
 
 class Render {
 
@@ -40,7 +40,7 @@ class Render {
         if (!file_exists($file)) {
             $customFile = CONTENT_PATH . 'custom' . DS . $view . '.php';
             if (!file_exists($customFile)) 
-                throw new \hl\core\exceptions\InvalidUrlException($file);
+                throw new \alkemann\hl\core\exceptions\InvalidUrlException($file);
             else 
                 $file = $customFile;
         }

@@ -1,6 +1,6 @@
 <?php
 
-use l10n\Message;
+use alkemann\hl\l10n\Message;
 
 Message::init('no_NB', LOCALES_PATH);
 

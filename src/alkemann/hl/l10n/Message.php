@@ -1,6 +1,6 @@
 <?php
 
-namespace l10n;
+namespace alkemann\hl\l10n;
 
 class Message {
 

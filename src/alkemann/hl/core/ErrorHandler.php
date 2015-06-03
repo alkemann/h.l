@@ -1,6 +1,8 @@
 <?php
 
-namespace hl\core\exceptions;
+namespace alkemann\hl\core;
+
+use alkemann\hl\core\exceptions\InvalidUrlException;
 
 class ErrorHandler {
 

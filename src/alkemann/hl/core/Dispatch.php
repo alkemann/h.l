@@ -2,7 +2,7 @@
 /**
  * Dispatch for Request and Route jobs
  */
-namespace hl\core;
+namespace alkemann\hl\core;
 
 class Dispatch {
 

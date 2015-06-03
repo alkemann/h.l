@@ -1,6 +1,6 @@
 <?php
 
-namespace hl\core;
+namespace alkemann\hl\core;
 
 class Router {
 

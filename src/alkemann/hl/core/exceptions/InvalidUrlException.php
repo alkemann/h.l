@@ -1,6 +1,6 @@
 <?php 
 
-namespace hl\core\exceptions;
+namespace alkemann\hl\core\exceptions;
 
 class InvalidUrlException extends BaseException {
 

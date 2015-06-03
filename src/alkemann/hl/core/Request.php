@@ -3,9 +3,9 @@
  *
  *
  */
-namespace hl\core;
+namespace alkemann\hl\core;
 
-use hl\core\Router;
+use alkemann\hl\core\Router;
 
 class Request {
 

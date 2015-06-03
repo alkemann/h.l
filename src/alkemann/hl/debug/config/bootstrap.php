@@ -3,7 +3,7 @@
   * Global convenience methods
   */
 
-use al13_debug\util\Debug;
+use alkemann\hl\debug\util\Debug;
 
 // Li3 specific code for loading defaults, disable if not used with Li3
 

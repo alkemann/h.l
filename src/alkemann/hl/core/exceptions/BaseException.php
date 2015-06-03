@@ -3,7 +3,7 @@
  * Contains all the Exceptions
  */
  
-namespace hl\core\exceptions;
+namespace alkemann\hl\core\exceptions;
 
 class BaseException extends \Exception {
 
