@@ -1,0 +1,24 @@
+{
+    "name": "alkemann/h.l",
+    "description": "Library containing the h.l classes used by the H.L.App base",
+    "version": "v1.0",
+    "type": "library",
+    "keywords": ["cms", "homepage", "alkemann"],
+    "homepage": "https://github.com/alkemann/h.l",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Morland",
+            "homepage": "https://github.com/alkemann",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/alkemann/h.l/issues"
+    },
+    "autoload": {
+        "psr-4": {
+            "alkemann\\": "src/alkemann/"
+        }
+    }
+}
