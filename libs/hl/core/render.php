@@ -52,8 +52,10 @@ class Render {
 
     public function foot() {
 
+        $type = $this->_request->type();
+
         $footfile = LAYOUT_PATH . 'foot.' . $type . '.php';
-        if (!file_exists($neckfile))
+        if (!file_exists($footfile))
             return '';
 
         ob_start();
