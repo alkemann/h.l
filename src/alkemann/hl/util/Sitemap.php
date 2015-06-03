@@ -17,7 +17,7 @@ class Sitemap {
         if (is_dir($path.$dir)) {
             if ($dirHandler = opendir($path.$dir)) {
                 while (($file = readdir($dirHandler)) !== false) {
-                    if ($file == '.' || $file == '..') continue;
+                    if ($file == '.' || $file == '..' || $file[0] == '.') continue;
                     if (filetype($path.$dir.DS.$file) == 'dir') {
                         $subfolders[] = $file;
                     } else {
