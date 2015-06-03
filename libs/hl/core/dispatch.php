@@ -5,7 +5,7 @@
 namespace hl\core;
 
 class Dispatch {
-    
+
     public $_render;
     public $_requestObj;
 

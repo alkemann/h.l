@@ -29,8 +29,8 @@ require CONTENT_PATH . 'bootstrap.php';
 
 try {
     $Dispatch->run();
-} catch (Exception $e) { 
+} catch (Exception $e) {
     $errorHandler = new hl\core\exceptions\ErrorHandler($e);
     $errorHandler->dispatch($Dispatch);
-    $errorHandler->deal(); 
+    $errorHandler->deal();
 }

@@ -63,4 +63,12 @@ class Request {
         $base = 'http://hjemmesiden.l/'; //@todo get base url;
         return $base . $view;
     }
+
+    public function setRequestAs404() {
+        $this->_view = 'error404';
+        $this->_path = [];
+        if (!in_array($this->_type, ['html', 'json'])) {
+            $this->_type = 'html';
+        }
+    }
 }
