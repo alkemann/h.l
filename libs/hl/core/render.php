@@ -7,6 +7,7 @@ namespace hl\core;
 class Render {
 
     protected $_request;
+    protected $_data = [];
 
     public function __construct($requestObj) {
         $this->_request = $requestObj;
@@ -78,4 +79,14 @@ class Render {
         echo $response;
     }
 
+    public function setData($key, $value) {
+        $this->_data[$key] = $value;
+    }
+
+    public function __get($name) {
+        if (isset($this->_data[$name])) {
+            return $this->_data[$name];
+        }
+        return "$name:N/A";
+    }
 }
