@@ -36,4 +36,11 @@ class Sitemap {
         }
         return $ret;
     }
+
+    public static function root() {
+        // dd($_SERVER);
+        $protocol = $_SERVER['REQUEST_SCHEME'];
+        $domain = $_SERVER['HTTP_HOST'];
+        return "$protocol://$domain/";
+    }
 }
