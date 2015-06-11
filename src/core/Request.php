@@ -12,8 +12,8 @@ class Request {
     protected $_url;
     protected $_fullUrl;
     protected $_type = 'html';
-    protected $_validTypes = array('html','json');
-    protected $_contentTypes = array('html' => 'text/html', 'json' => 'application/json');
+    protected $_validTypes = array('html','json', 'xml');
+    protected $_contentTypes = array('html' => 'text/html', 'json' => 'application/json', 'xml' => 'application/xml');
     protected $_static;
     protected $_webroot;
     protected $_path;
