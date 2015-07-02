@@ -9,6 +9,11 @@ use alkemann\hl\core\Router;
 
 class Request {
 
+    const GET = 'GET';
+    const POST = 'POST';
+    const PUT = 'PUT';
+    const DELETE = 'DELETE';
+
     protected $_url;
     protected $_fullUrl;
     protected $_type = 'html';
@@ -18,6 +23,7 @@ class Request {
     protected $_webroot;
     protected $_path;
     protected $_view;
+    protected $_method;
 
     public function __construct() {
         $this->_url = Router::request_to_url($_REQUEST);
@@ -35,6 +41,7 @@ class Request {
                 $this->_view = substr($this->_view, 0, $p);
             }
         }
+        $this->_method = $_SERVER['REQUEST_METHOD'];
     }
 
     public function viewToRender() {
@@ -45,6 +52,11 @@ class Request {
         return $ret;
     }
 
+    public function getPostBody() {
+        return file_get_contents('php://input');
+    }
+
+    public function method() { return $this->_method; }
     public function path() { return $this->_path; }
     public function view() { return $this->_view; }
     public function type() { return $this->_type; }

@@ -17,6 +17,14 @@ class Render {
         return $this->_request;
     }
 
+    public function respondWith404() {
+        header("HTTP/1.0 404 Not Found");
+    }
+
+    public function respondWith400($message = 'Bad Request') {
+        header("HTTP/1.0 400 $message");
+    }
+
     public function head() {
         ob_start();
         $render = $this;
