@@ -47,9 +47,9 @@ class Render {
         $file = CONTENT_PATH . 'pages' . DS . $view . '.php';
         if (!file_exists($file)) {
             $customFile = CONTENT_PATH . 'custom' . DS . $view . '.php';
-            if (!file_exists($customFile)) 
+            if (!file_exists($customFile))
                 throw new \alkemann\hl\core\exceptions\InvalidUrlException($file);
-            else 
+            else
                 $file = $customFile;
         }
         ob_start();
