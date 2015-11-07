@@ -50,7 +50,7 @@ class Mysql {
 
     public function q($query, array $params = []) {
         $result = $this->mysql->query($query);
-        return $result ? $result : null;
+        return $result;
     }
 
     public function insert($table, array $data) {
