@@ -50,6 +50,10 @@ class Mysql {
 
     public function q($query, array $params = []) {
         $result = $this->mysql->query($query);
+        $last_error = $this->mysql->error;
+        if ($last_error) {
+            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
+        }
         return $result;
     }
 
@@ -64,8 +68,12 @@ class Mysql {
         $values = join("','", $values);
         $values = "'$values',NOW(),NOW()";
         $query  = "INSERT INTO `$table` ($fields) VALUES ($values);";
-        \alkemann\hl\util\Log::debug("Query:" . $query);
+        \alkemann\hl\util\Log::debug("Query: " . $query);
         $result = $this->mysql->query($query);
+        $last_error = $this->mysql->error;
+        if ($last_error) {
+            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
+        }
         if ($result !== true) {
             return false;
         }
