@@ -64,6 +64,7 @@ class Mysql {
         $values = join("','", $values);
         $values = "'$values',NOW(),NOW()";
         $query  = "INSERT INTO `$table` ($fields) VALUES ($values);";
+        \alkemann\hl\util\Log::debug("Query:" . $query);
         $result = $this->mysql->query($query);
         if ($result !== true) {
             return false;

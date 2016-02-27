@@ -63,7 +63,9 @@ class Model
         $id     = $db->escape($id);
         $pk     = $this->pk();
         $table  = $this->table();
-        $result = $db->q("SELECT * FROM `$table` WHERE $pk=$id LIMIT 1;");
+        $query  = "SELECT * FROM `$table` WHERE $pk=$id LIMIT 1;";
+        \alkemann\hl\util\Log::debug("Query:" . $query);
+        $result = $db->q($query);
         if (!$result) {
             return null;
         }
@@ -103,7 +105,7 @@ class Model
         } else {
             $query .= " LIMIT 10";
         }
-
+        \alkemann\hl\util\Log::debug("Query:" . $query);
         $c = $this->entity_class;
         $result = $db->q($query);
         $return = [];
