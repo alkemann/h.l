@@ -124,12 +124,9 @@ class Model
 
         $id = $db->insert($table, $this->filter_fields($data));
         if (!$id) return false;
-
         $inserted = static::get($id);
-
         $entity->reset();
-        $entity->data($inserted->data);
-
+        $entity->data($inserted->data());
         unset($inserted);
 
         return true;
