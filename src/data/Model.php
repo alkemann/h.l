@@ -85,16 +85,27 @@ class Model
         $fields = $this->fields();
         $query = "SELECT * FROM `$table`";
         if ($conditions) {
-            $query .= " WHERE 1=1";
+            $where = [];
             foreach ($conditions as $field => $value) {
                 if (in_array($field, $fields)) {
-                    $query .= " AND `$field` = $value"; // @TODO escape
+                    $where[] = "`$field` = $value"; // @TODO escape
                 }
+            }
+            if ($where) {
+                $query .= " WHERE " . join(' AND ', $where);
             }
         }
 
-        if (isset($options['limit'])) {
-            $query .= " ORDER BY {$options['order']}";
+        if (isset($options['order'])) {
+            if (is_array($options['order'])) {
+                $order = [];
+                foreach ($options['order'] as $field => $dir) {
+                    $order[] = "`$field` " . (strtoupper($dir) == 'ASC' ? 'ASC' : 'DESC');
+                }
+                $query .= " ORDER BY " . join(' AND ', $order);
+            } else {
+                $query .= " ORDER BY `{$options['order']}`";
+            }
         }
 
         if (isset($options['limit'])) {
