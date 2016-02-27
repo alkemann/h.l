@@ -15,6 +15,12 @@ class Entity implements \JsonSerializable
         }
     }
 
+    public function exists()
+    {
+        $pk = $this->model->pk();
+        return $this->$pk;
+    }
+
     public function data(array $data = null)
     {
         if (is_null($data)) {

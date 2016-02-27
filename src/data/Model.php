@@ -37,7 +37,7 @@ class Model
         return $this->config['table'];
     }
 
-    protected function pk()
+    public function pk()
     {
         return isset($this->config['pk']) ? $this->config['pk'] : 'id';
     }
