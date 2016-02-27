@@ -21,6 +21,12 @@ class Model
         $this->db = $db->db($this->config['db']);
     }
 
+    public function create(array $data = [])
+    {
+        $entity_class = $this->entity_class;
+        return new $entity_class($this, $data);
+    }
+
     protected function db()
     {
         return $this->db;
