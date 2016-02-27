@@ -12,7 +12,7 @@ class Connection {
             $config = (require $config);
         }
         if (!is_array($config)) {
-            throw new Exception("Config is not an array!");
+            throw new \Exception("Config is not an array!");
         }
         $defaults = [
             'host'      => 'localhost',
