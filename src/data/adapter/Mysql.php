@@ -57,6 +57,41 @@ class Mysql {
         return $result;
     }
 
+    public function update($table, array $conditions,  array $data) {
+        if (!$conditions || !$data) return false;
+
+        $values = [];
+        foreach ($data as $field => $value) {
+            $field = $this->mysql->escape_string($field);
+            $value = $this->mysql->escape_string($value);
+            $values[] = "`$field` = '$value'";
+        }
+        $values[] = "`updated` = NOW()";
+        $where = [];
+        foreach ($conditions as $field => $value) {
+            $field = $this->mysql->escape_string($field);
+            $value = $this->mysql->escape_string($value);
+            $where[] = "`$field` = '$value'";
+        }
+        if (!$where) {
+            \alkemann\hl\util\Log::error("No where conditions for update!");
+            return false;
+        }
+        $query = "UPDATE `$table` SET ";
+        $query .= join(', ', $values);
+        $query .= " WHERE " . join(' AND ', $where);
+        \alkemann\hl\util\Log::debug("Query: " . $query);
+        $result = $this->mysql->query($query);
+        $last_error = $this->mysql->error;
+        if ($last_error) {
+            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
+        }
+        if ($result !== true) {
+            return false;
+        }
+        return $this->mysql->affected_rows;
+    }
+
     public function insert($table, array $data) {
         if (!$data) return false;
         $fields = join('`,`', array_keys($data));

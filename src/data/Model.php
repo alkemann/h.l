@@ -117,13 +117,21 @@ class Model
 
     public function save(Entity $entity, array $data = [], array $options = [])
     {
-        $data += $entity->data();
-
         $db = $this->db();
         $table = $this->table();
 
-        $id = $db->insert($table, $this->filter_fields($data));
-        if (!$id) return false;
+        if ($entity->exists()) {
+            // @TODO entity updated fields?
+            $pk = $this->pk();
+            $id = $entity->$pk;
+            $conditions = [$pk => $id];
+            $rows = $db->update($table, $conditions, $data);
+        } else {
+            $data += $entity->data();
+            $id = $db->insert($table, $this->filter_fields($data));
+            if (!$id) return false;
+
+        }
         $inserted = static::get($id);
         $entity->reset();
         $entity->data($inserted->data());
