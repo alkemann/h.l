@@ -114,4 +114,25 @@ class Mysql {
         }
         return $this->mysql->insert_id;
     }
+
+    public function delete($table, array $conditions) {
+        if (!$conditions) return false;
+        $where = [];
+        foreach ($conditions as $field => $value) {
+            $field = $this->mysql->escape_string($field);
+            $value = $this->mysql->escape_string($value);
+            $where[] = "`$field` = '$value'";
+        }
+        $query = "DELETE FROM `$table` WHERE " . join(' AND ', $where);
+        \alkemann\hl\util\Log::debug("Query: " . $query);
+        $result = $this->mysql->query($query);
+        $last_error = $this->mysql->error;
+        if ($last_error) {
+            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
+        }
+        if ($result !== true) {
+            return false;
+        }
+        return $this->mysql->insert_id;
+    }
 }

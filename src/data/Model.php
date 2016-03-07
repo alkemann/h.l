@@ -150,4 +150,13 @@ class Model
 
         return true;
     }
+
+    public function delete(Entity $entity, array $options = [])
+    {
+        $db = $this->db();
+        $table = $this->table();
+        $pk = $this->pk();
+        $id = $entity->$pk;
+        $db->delete($table, [$pk => $id]);
+    }
 }
