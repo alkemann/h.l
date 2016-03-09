@@ -10,6 +10,7 @@ use alkemann\hl\core\Router;
 class Request {
 
     const GET = 'GET';
+    const PATCH = 'PATCH';
     const POST = 'POST';
     const PUT = 'PUT';
     const DELETE = 'DELETE';
@@ -32,14 +33,17 @@ class Request {
         $last = \array_slice($parts, -1, 1, true);
         unset($parts[key($last)]);
         $this->_path = $parts;
-
         $this->_view = current($last);
-        if ($p = strrpos($this->_view, '.')) {
-            $type = substr($this->_view, $p + 1);
+
+        $period = strrpos($this->_view, '.');
+        if ($period) {
+            $type = substr($this->_view, $period + 1);
             if (in_array($type, $this->_validTypes)) {
                 $this->_type = $type;
                 $this->_view = substr($this->_view, 0, $p);
             }
+        } else {
+            $this->setResponseTypeFromHeaders();
         }
         $this->_method = $_SERVER['REQUEST_METHOD'];
     }
@@ -66,6 +70,23 @@ class Request {
             return $this->_contentTypes[$this->type()];
         } else {
             return "text/html";
+        }
+    }
+
+    public function param($name) {
+        if (isset($_GET[$name]))
+            return $_GET[$name];
+        if (isset($_POST[$name]))
+            return $_POST[$name];
+
+        return null;
+    }
+
+    public function setResponseTypeFromHeaders() {
+        if ($_SERVER['HTTP_ACCEPT'] === '*/*') return;
+        if (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false) {
+            // TODO add support for more type?
+            $this->_type = 'json';
         }
     }
 
