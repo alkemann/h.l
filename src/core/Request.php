@@ -40,7 +40,7 @@ class Request {
             $type = substr($this->_view, $period + 1);
             if (in_array($type, $this->_validTypes)) {
                 $this->_type = $type;
-                $this->_view = substr($this->_view, 0, $p);
+                $this->_view = substr($this->_view, 0, $period);
             }
         } else {
             $this->setResponseTypeFromHeaders();
