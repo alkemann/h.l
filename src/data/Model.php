@@ -2,23 +2,24 @@
 
 namespace alkemann\hl\data;
 
-use alkemann\hl\data\Db;
-
 class Model
 {
     protected $db;
     protected $entity_class;
     protected $config = [];
 
-    public function __construct(Db $db, array $config = [])
+    public function __construct(array $config = [])
     {
         $defaults = [
-            'entity_class' => 'alkemann\hl\data\Entity'
+            'entity_class' => 'alkemann\hl\data\Entity',
+            'connection' => false,
         ];
         $config += $defaults;
         foreach ($config as $k => $v) $this->config[$k] = $v;
         $this->entity_class = $this->config['entity_class'];
-        $this->db = $db->db($this->config['db']);
+        if (isset($config['connection']) && $config['connection']) {
+            $this->db = database($config['connection']);
+        }
     }
 
     public function create(array $data = [])
