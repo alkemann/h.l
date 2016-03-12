@@ -25,7 +25,7 @@ class Mysql {
         $host = $this->_config['host'];
         $user = $this->_config['username'];
         $pass = $this->_config['password'];
-        if ($database = $this->_config['db']) {
+        if ($database = $this->_config['database']) {
             $this->mysql = new mysqli($host, $user, $pass, $database);
         } else {
             $this->mysql = new mysqli($host, $user, $pass);
