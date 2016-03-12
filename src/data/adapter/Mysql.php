@@ -2,19 +2,16 @@
 
 namespace alkemann\hl\data\adapter;
 
-use alkemann\hl\data\Connection;
 use Exception;
 use mysqli;
 
 class Mysql {
 
-    protected $_connection = null;
     protected $_config = [];
 
     private $mysql;
 
-    public function __construct(Connection $connection, array $config = []) {
-        $this->_connection = $connection;
+    public function __construct(array $config = []) {
 
         $defaults = ['auto_connect' => true];
         $this->_config = $config + $defaults;
@@ -25,10 +22,10 @@ class Mysql {
     }
 
     public function connect() {
-        $host = $this->_connection->host;
-        $user = $this->_connection->username;
-        $pass = $this->_connection->password;
-        if ($database = $this->_connection->db) {
+        $host = $this->_config['host'];
+        $user = $this->_config['username'];
+        $pass = $this->_config['password'];
+        if ($database = $this->_config['db']) {
             $this->mysql = new mysqli($host, $user, $pass, $database);
         } else {
             $this->mysql = new mysqli($host, $user, $pass);

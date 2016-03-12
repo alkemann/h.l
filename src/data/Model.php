@@ -2,7 +2,25 @@
 
 namespace alkemann\hl\data;
 
-require_once 'database.php';
+function database($config = []) {
+    if (is_string($config)) {
+        $config = (require $config);
+    }
+
+    $defaults = [
+        'host'          => 'localhost',
+        'username'      => '',
+        'password'      => '',
+        'port'          => '',
+        'type'          => 'mysql',
+        'adapter_class' => 'alkemann\hl\data\adapter\Mysql',
+    ];
+    $config += $defaults;
+
+    $adapter_class = $config['adapter_class'];
+    $adapter = new $adapter_class($config);
+    return $adapter->db($config['database']);
+}
 
 class Model
 {
@@ -19,8 +37,7 @@ class Model
         $config += $defaults;
         foreach ($config as $k => $v) $this->config[$k] = $v;
         $this->entity_class = $this->config['entity_class'];
-
-        if (is_array($config['connection']) && $config['connection']) {
+        if (isset($config['connection']) && $config['connection']) {
             $this->db = database($config['connection']);
         }
     }
