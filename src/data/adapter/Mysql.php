@@ -40,7 +40,10 @@ class Mysql {
     }
 
     public function db($database) {
-        $this->mysql->select_db($database) or die("Can't select database [$database]");
+        $result = $this->mysql->select_db($database);
+        if (!$result) {
+            die($this->mysql->error . " \n Can't select database [$database]");
+        }
         return $this;
     }
 
