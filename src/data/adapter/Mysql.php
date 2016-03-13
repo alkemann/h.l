@@ -57,6 +57,24 @@ class Mysql {
         return $result;
     }
 
+    public function find($table, array $conditions) {
+        $where = [];
+        foreach ($conditions as $field => $value) {
+            $field = $this->mysql->escape_string($field);
+            $value = $this->mysql->escape_string($value);
+            $where[] = "`$field` = '$value'";
+        }
+        $query = "SELECT * FROM `$table`";
+        if ($where)
+            $query .= " WHERE " . join(' AND ', $where);
+        \alkemann\hl\util\Log::debug("Query: " . $query);
+        $result = $this->mysql->query($query);
+        if (!$result) {
+            return null;
+        }
+        return $result;
+    }
+
     public function update($table, array $conditions,  array $data) {
         if (!$conditions || !$data) return false;
 
