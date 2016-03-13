@@ -60,22 +60,12 @@ class Model
 
     public function get($id)
     {
-        $db     = $this->db();
-        $id     = $db->escape($id);
-        $pk     = $this->pk();
-        $table  = $this->table();
-        $query  = "SELECT * FROM `$table` WHERE $pk=$id LIMIT 1;";
-        \alkemann\hl\util\Log::debug("Query: " . $query);
-        $result = $db->q($query);
+        $result = $this->db()->find($this->table(), [$this->pk() => $id], ['limit' => 1]);
         if (!$result) {
             return null;
         }
-        $data = $result->fetch_assoc();
-        if (!$data) {
-            return null;
-        }
         $c = $this->entity_class;
-        $obj = new $c($this, $data);
+        $obj = new $c($this, $result[0]);
         return $obj;
     }
 
@@ -83,45 +73,10 @@ class Model
     {
         $db     = $this->db();
         $table  = $this->table();
-        $fields = $this->fields();
-        $query = "SELECT * FROM `$table`";
-        if ($conditions) {
-            $where = [];
-            foreach ($conditions as $field => $value) {
-                if (in_array($field, $fields)) {
-                    $where[] = "`$field` = $value"; // @TODO escape
-                }
-            }
-            if ($where) {
-                $query .= " WHERE " . join(' AND ', $where);
-            }
-        }
-
-        if (isset($options['order'])) {
-            if (is_array($options['order'])) {
-                $order = [];
-                foreach ($options['order'] as $field => $dir) {
-                    $order[] = "`$field` " . (strtoupper($dir) == 'ASC' ? 'ASC' : 'DESC');
-                }
-                $query .= " ORDER BY " . join(' AND ', $order);
-            } else {
-                $query .= " ORDER BY `{$options['order']}`";
-            }
-        }
-
-        if (isset($options['limit'])) {
-            $query .= " LIMIT {$options['limit']}";
-            if (isset($options['offset'])) {
-                $query .= ',' . $options['offset'];
-            }
-        } else {
-            $query .= " LIMIT 10";
-        }
-        \alkemann\hl\util\Log::debug("Query: " . $query);
+        $result = $db->find($table, $conditions, $options);
         $c = $this->entity_class;
-        $result = $db->q($query);
         $return = [];
-        while ($result && $data = $result->fetch_assoc()) {
+        foreach ($result as $data) {
             $return[] = new $c($this, $data);
         }
         return $return;

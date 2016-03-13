@@ -49,6 +49,7 @@ class Mysql {
     }
 
     public function q($query, array $params = []) {
+        \alkemann\hl\util\Log::debug("Query: " . $query);
         $result = $this->mysql->query($query);
         $last_error = $this->mysql->error;
         if ($last_error) {
@@ -57,20 +58,84 @@ class Mysql {
         return $result;
     }
 
-    public function find($table, array $conditions) {
+    public function find($table, array $conditions, array $options = []) {
+        $options += ['limit' => 99, 'array' => true, 'fields' => false, 'pk' => false];
+
+        $query = "SELECT "
+            . $this->fields($options['fields'])
+            . " FROM `$table`"
+            . $this->where($conditions)
+            . $this->options($options);
+
+        $result = $this->execute($query);
+        if (!$result) {
+            return null;
+        }
+        if ($options['array']) {
+            $return = [];
+            $pk = $options['pk'];
+            while ($r = $result->fetch_assoc()) {
+                if ($pk && isset($r[$pk])) {
+                    $return[$r[$pk]] = $r;
+                } else {
+                    $return[] = $r;
+                }
+            }
+            return $return;
+        }
+
+        return $result;
+    }
+
+    private function fields($fields) {
+        if (!$fields) return '*';
+        foreach ($fields as &$field) {
+            $field = "`" . $this->mysql->escape_string($field) . "`";
+        }
+        return join(',', $fields);
+    }
+
+    private function where(array $conditions) {
         $where = [];
         foreach ($conditions as $field => $value) {
             $field = $this->mysql->escape_string($field);
             $value = $this->mysql->escape_string($value);
             $where[] = "`$field` = '$value'";
         }
-        $query = "SELECT * FROM `$table`";
-        if ($where)
-            $query .= " WHERE " . join(' AND ', $where);
+       return $where ? " WHERE " . join(' AND ', $where) : "";
+    }
+
+    private function options(array $options) {
+        if (!$options) return '';
+
+        $query = '';
+        if (isset($options['order'])) {
+            if (is_array($options['order'])) {
+                $order = [];
+                foreach ($options['order'] as $field => $dir) {
+                    $order[] = "`$field` " . (strtoupper($dir) == 'ASC' ? 'ASC' : 'DESC');
+                }
+                $query .= " ORDER BY " . join(' AND ', $order);
+            } else {
+                $query .= " ORDER BY `{$options['order']}`";
+            }
+        }
+
+        if (isset($options['limit'])) {
+            $query .= " LIMIT {$options['limit']}";
+            if (isset($options['offset'])) {
+                $query .= ',' . $options['offset'];
+            }
+        }
+        return $query;
+    }
+
+    private function execute($query) {
         \alkemann\hl\util\Log::debug("Query: " . $query);
         $result = $this->mysql->query($query);
-        if (!$result) {
-            return null;
+        $last_error = $this->mysql->error;
+        if ($last_error) {
+            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
         }
         return $result;
     }
@@ -85,25 +150,13 @@ class Mysql {
             $values[] = "`$field` = '$value'";
         }
         $values[] = "`updated` = NOW()";
-        $where = [];
-        foreach ($conditions as $field => $value) {
-            $field = $this->mysql->escape_string($field);
-            $value = $this->mysql->escape_string($value);
-            $where[] = "`$field` = '$value'";
-        }
+        $where = $this->where($conditions);
         if (!$where) {
             \alkemann\hl\util\Log::error("No where conditions for update!");
             return false;
         }
-        $query = "UPDATE `$table` SET ";
-        $query .= join(', ', $values);
-        $query .= " WHERE " . join(' AND ', $where);
-        \alkemann\hl\util\Log::debug("Query: " . $query);
-        $result = $this->mysql->query($query);
-        $last_error = $this->mysql->error;
-        if ($last_error) {
-            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
-        }
+        $query = "UPDATE `$table` SET " . join(', ', $values). $where;
+        $result = $this->execute($query);
         if ($result !== true) {
             return false;
         }
@@ -121,12 +174,7 @@ class Mysql {
         $values = join("','", $values);
         $values = "'$values',NOW(),NOW()";
         $query  = "INSERT INTO `$table` ($fields) VALUES ($values);";
-        \alkemann\hl\util\Log::debug("Query: " . $query);
-        $result = $this->mysql->query($query);
-        $last_error = $this->mysql->error;
-        if ($last_error) {
-            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
-        }
+        $result = $this->execute($query);
         if ($result !== true) {
             return false;
         }
@@ -134,20 +182,13 @@ class Mysql {
     }
 
     public function delete($table, array $conditions) {
-        if (!$conditions) return false;
-        $where = [];
-        foreach ($conditions as $field => $value) {
-            $field = $this->mysql->escape_string($field);
-            $value = $this->mysql->escape_string($value);
-            $where[] = "`$field` = '$value'";
+        $where = $this->where($conditions);
+        if (!$where) {
+            \alkemann\hl\util\Log::error("No where conditions for delete!");
+            return false;
         }
-        $query = "DELETE FROM `$table` WHERE " . join(' AND ', $where);
-        \alkemann\hl\util\Log::debug("Query: " . $query);
-        $result = $this->mysql->query($query);
-        $last_error = $this->mysql->error;
-        if ($last_error) {
-            \alkemann\hl\util\Log::error("MYSQL: " . $last_error);
-        }
+        $query = "DELETE FROM `$table`" . $where;
+        $result = $this->execute($query);
         if ($result !== true) {
             return false;
         }
