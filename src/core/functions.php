@@ -2,9 +2,6 @@
 
 namespace alkemann\hl\core;
 
-use alkemann\hl\core\Request;
-use alkemann\hl\core\Render;
-
 function handleError(\Exception $exception, Request $request) {
         if ($exception instanceof alkemann\hl\core\exceptions\InvalidUrlException) {
             header("HTTP/1.0 404 Not Found");
@@ -27,7 +24,7 @@ function handleError(\Exception $exception, Request $request) {
                 include $errorPage;
             }
         } else {
-            $render = new Render($request);
+            $render = new Page($request);
             $render->render((string) $exception);
         }
 

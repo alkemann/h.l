@@ -104,4 +104,12 @@ class Request {
             $this->_type = 'html';
         }
     }
+
+    public function response() {
+        if ($this->_callback) {
+            $cb = $this->_callback;
+            return $cb($this);
+        }
+        return new Page($this);
+    }
 }

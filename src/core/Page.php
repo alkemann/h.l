@@ -4,7 +4,7 @@
  */
 namespace alkemann\hl\core;
 
-class Render {
+class Page {
 
     protected $_request;
     protected $_data = [];
