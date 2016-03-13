@@ -4,26 +4,9 @@
  */
 namespace alkemann\hl\core;
 
-class Page {
+class Page extends Response {
 
-    protected $_request;
     protected $_data = [];
-
-    public function __construct($requestObj) {
-        $this->_request = $requestObj;
-    }
-
-    public function request() {
-        return $this->_request;
-    }
-
-    public function respondWith404() {
-        header("HTTP/1.0 404 Not Found");
-    }
-
-    public function respondWith400($message = 'Bad Request') {
-        header("HTTP/1.0 400 $message");
-    }
 
     public function head() {
         ob_start();
@@ -74,6 +57,17 @@ class Page {
         return $ret;
     }
 
+    public function setData($key, $value) {
+        $this->_data[$key] = $value;
+    }
+
+    public function __get($name) {
+        if (isset($this->_data[$name])) {
+            return $this->_data[$name];
+        }
+        return "$name:N/A";
+    }
+
     public function render($content = null) {
         $contentType = $this->_request->contentType();
         header("Content-type: $contentType");
@@ -87,14 +81,4 @@ class Page {
         echo $response;
     }
 
-    public function setData($key, $value) {
-        $this->_data[$key] = $value;
-    }
-
-    public function __get($name) {
-        if (isset($this->_data[$name])) {
-            return $this->_data[$name];
-        }
-        return "$name:N/A";
-    }
 }

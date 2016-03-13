@@ -25,10 +25,24 @@ class Request {
     protected $_path;
     protected $_view;
     protected $_method;
+    protected $_route;
 
     public function __construct() {
-        $this->_url = Router::request_to_url($_REQUEST);
+        $this->_method = $_SERVER['REQUEST_METHOD'];
+        $this->setResponseTypeFromHeaders();
 
+        $route = Router::request_to_url($_REQUEST);
+
+        if ($route instanceof Route) {
+            $this->_url = $_REQUEST['url'];
+            $this->_route = $route;
+        } else {
+            $this->_url = $route;
+            $this->setPageFromUrl();
+        }
+    }
+
+    private function setPageFromUrl() {
         $parts = \explode('/', $this->_url);
         $last = \array_slice($parts, -1, 1, true);
         unset($parts[key($last)]);
@@ -42,10 +56,7 @@ class Request {
                 $this->_type = $type;
                 $this->_view = substr($this->_view, 0, $period);
             }
-        } else {
-            $this->setResponseTypeFromHeaders();
         }
-        $this->_method = $_SERVER['REQUEST_METHOD'];
     }
 
     public function viewToRender() {
@@ -74,6 +85,8 @@ class Request {
     }
 
     public function param($name) {
+        if (isset($this->_parameters[$name]))
+            return $this->_parameters[$name];
         if (isset($_GET[$name]))
             return $_GET[$name];
         if (isset($_POST[$name]))
@@ -106,9 +119,10 @@ class Request {
     }
 
     public function response() {
-        if ($this->_callback) {
-            $cb = $this->_callback;
-            return $cb($this);
+        if ($this->_route) {
+            $cb = $this->_route->callback;
+            $this->_parameters = $this->_route->parameters;
+            return call_user_func_array($cb, [$this]);
         }
         return new Page($this);
     }
