@@ -74,6 +74,7 @@ class Model
         $db     = $this->db();
         $table  = $this->table();
         $result = $db->find($table, $conditions, $options);
+        if (!$result) return [];
         $c = $this->entity_class;
         $return = [];
         foreach ($result as $data) {
