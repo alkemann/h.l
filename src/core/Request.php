@@ -31,7 +31,7 @@ class Request {
         $this->_method = $_SERVER['REQUEST_METHOD'];
         $this->setResponseTypeFromHeaders();
 
-        $route = Router::request_to_url($_REQUEST);
+        $route = Router::request_to_url($_REQUEST, $_SERVER['REQUEST_METHOD']);
 
         if ($route instanceof Route) {
             $this->_url = $_REQUEST['url'];
@@ -116,6 +116,10 @@ class Request {
         if (!in_array($this->_type, ['html', 'json'])) {
             $this->_type = 'html';
         }
+    }
+
+    public function overrideResponseType($format) {
+        $this->_type = $format;
     }
 
     public function response() {

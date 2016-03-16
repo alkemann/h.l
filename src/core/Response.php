@@ -8,31 +8,36 @@ class Response {
     protected $_content;
     protected $_format;
 
-    public function __construct($requestObj, $content = null, $format = 'json') {
-        $this->_request = $requestObj;
-        $this->_content = $content;
+    protected $_validTypes = ['html','json', 'xml'];
+    protected $_contentTypes = ['html' => 'text/html', 'json' => 'application/json', 'xml' => 'application/xml'];
+
+    public function __construct($content = null, $format = 'json') {
         $this->_format  = $format;
-    }
-
-    public function request() {
-        return $this->_request;
-    }
-
-    public function respondWith404() {
-        header("HTTP/1.0 404 Not Found");
-    }
-
-    public function respondWith400($message = 'Bad Request') {
-        header("HTTP/1.0 400 $message");
-    }
-
-    public function setResponse($content, $format = 'json') {
-        $this->_content = $content;
+        $this->setContent($content);
     }
 
     public function render() {
-        $contentType = $this->_request->contentType();
+        $contentType = $this->contentType($this->_format);
         header("Content-type: $contentType");
         echo $this->_content;
+    }
+
+    private function setContent($content) {
+        switch ($this->_format) {
+            case 'json':
+                $this->_content = json_encode($content);
+                break;
+            // TODO XML
+            default:
+                $this->_content = $content;
+                break;
+        }
+    }
+
+    private function contentType($format) {
+        if (in_array($format, $this->_validTypes)) {
+            return $this->_contentTypes[$format];
+        }
+        return "text/html";
     }
 }
