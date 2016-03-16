@@ -2,7 +2,9 @@
 
 namespace alkemann\hl\core;
 
-class Response {
+use alkemann\hl\core\interfaces\IResponse;
+
+class Response implements IResponse {
 
     protected $_request;
     protected $_content;

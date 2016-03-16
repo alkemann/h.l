@@ -130,4 +130,19 @@ class Request {
         }
         return new Page($this);
     }
+
+    // TODO add support for reverse route match
+    public function redirect($url) {
+        header( "Location: " . $url);
+        exit;
+    }
+
+    public function session($name = null) {
+        // TODO add support for dot notation
+        if (session_status() != PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+        if ($name && isset($_SESSION[$name]))
+            return $_SESSION[$name];
+    }
 }

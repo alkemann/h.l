@@ -4,9 +4,20 @@
  */
 namespace alkemann\hl\core;
 
-class Page extends Response {
+use alkemann\hl\core\interfaces\IResponse;
+
+class Page implements IResponse {
 
     protected $_data = [];
+    protected $_request;
+
+    public function __construct(Request $request) {
+        $this->_request = $request;
+    }
+
+    public function request() {
+        return $this->_request;
+    }
 
     public function head() {
         ob_start();

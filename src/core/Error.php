@@ -2,7 +2,9 @@
 
 namespace alkemann\hl\core;
 
-class Error {
+use alkemann\hl\core\interfaces\IResponse;
+
+class Error implements IResponse {
 
     protected $_error;
     protected $_message;
