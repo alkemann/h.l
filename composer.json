@@ -1,7 +1,7 @@
 {
     "name": "alkemann/h.l",
     "description": "Library containing the h.l classes used by the H.L.App base",
-    "version": "2",
+    "version": "3.4.1",
     "type": "library",
     "keywords": ["cms", "homepage", "alkemann"],
     "homepage": "https://github.com/alkemann/h.l",
