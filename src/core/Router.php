@@ -25,8 +25,12 @@ class Router {
                 $result = preg_match($route, $url, $matches);
                 if (!$result) continue;
 
-            $parameters = array_filter($matches, function($v) {return !is_int($v);}, 
-                ARRAY_FILTER_USE_KEY);
+                // Requires PHP 5.6
+                $parameters = array_filter(
+                    $matches,
+                    function($v) {return !is_int($v);},
+                    ARRAY_FILTER_USE_KEY
+                );
 
                 return new Route($url, $route, $cb, $parameters);
 

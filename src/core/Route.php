@@ -15,5 +15,4 @@ class Route {
         $this->callback = $cb;
         $this->parameters = $parameters;
     }
-
 }

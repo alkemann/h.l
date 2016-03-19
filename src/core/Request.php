@@ -1,8 +1,5 @@
 <?php
-/**
- *
- *
- */
+
 namespace alkemann\hl\core;
 
 use alkemann\hl\core\Router;
