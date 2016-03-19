@@ -37,26 +37,8 @@ class Router {
             }
         }
         // Not a dynamic route, assume static route
-        $routeUrl = static::convertRequestUrlToPageUrl($url);
-        return new Route($routeUrl, $url, function($request) {
-            // unpack the url and convert to a page file path
-            // set the view on the request then return a Page
-            $url = $request->url();
-            $parts = \explode('/', $url);
-            $last = \array_slice($parts, -1, 1, true);
-            unset($parts[key($last)]);
-            $request->setPath($parts);
-            $view = current($last);
-            $request->setView($view);
-            $period = strrpos($view, '.');
-            if ($period) {
-                $type = substr($view, $period + 1);
-                if ($request->validType($type)) {
-                    $request->overrideResponseType($type);
-                    $view = substr($view, 0, $period);
-                    $request->setView($view);
-                }
-            }
+        $routedUrl = static::convertRequestUrlToPageUrl($url);
+        return new Route($routedUrl, null, function($request) {
             return new Page($request);
         });
     }

@@ -7,10 +7,10 @@ use alkemann\hl\core\exceptions\InvalidUrlException;
 function handleError(\Exception $exception, Request $request) {
     if ($exception instanceof InvalidUrlException) {
         header("HTTP/1.0 404 Not Found");
-        $render = new Page($request);
-        $request->setRequestAs404();
-        $render->setData('missing', $exception->getMessage());
-        $render->render();
+        $page = new Page($request);
+        $page->setRequestAs404();
+        $page->setData('missing', $exception->getMessage());
+        $page->render();
     } elseif (DEBUG === 0) {
         $file = LOGS_PATH . 'error.' . time() . '.log';
         $fileHandler = fopen($file, 'c');
